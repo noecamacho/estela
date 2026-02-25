@@ -1,71 +1,18 @@
 import { useEffect, useState } from 'react';
 import { Timestamp } from 'firebase/firestore';
 import { useAuth } from '../context/AuthContext';
+import { useLanguage } from '../context/LanguageContext';
 import {
   subscribeToDosBanderas,
   addDosBanderasEntry,
   updateEntry,
   deleteEntry,
 } from '../lib/firestore';
+import { formatDate, toLocalInput } from '../lib/date-utils';
 import type { DosBanderasEntryWithId } from '../types';
 import { EntryCard } from './EntryCard';
 import { ConfirmDialog } from './ConfirmDialog';
 import { EmptyState } from './EmptyState';
-
-function relativePrefix(d: Date): string {
-  const now = new Date();
-  const today = new Date(now.getFullYear(), now.getMonth(), now.getDate());
-  const target = new Date(d.getFullYear(), d.getMonth(), d.getDate());
-  const diff = Math.round(
-    (today.getTime() - target.getTime()) / (1000 * 60 * 60 * 24),
-  );
-  if (diff === 0) return 'Hoy — ';
-  if (diff === 1) return 'Ayer — ';
-  return '';
-}
-
-function formatDate(timestamp: Timestamp): string {
-  const d = timestamp.toDate();
-  const days = [
-    'Domingo',
-    'Lunes',
-    'Martes',
-    'Miercoles',
-    'Jueves',
-    'Viernes',
-    'Sabado',
-  ];
-  const months = [
-    'enero',
-    'febrero',
-    'marzo',
-    'abril',
-    'mayo',
-    'junio',
-    'julio',
-    'agosto',
-    'septiembre',
-    'octubre',
-    'noviembre',
-    'diciembre',
-  ];
-  const h = d.getHours();
-  const m = d.getMinutes().toString().padStart(2, '0');
-  const ampm = h >= 12 ? 'pm' : 'am';
-  const h12 = h % 12 || 12;
-  const prefix = relativePrefix(d);
-  return `${prefix}${days[d.getDay()]} ${d.getDate()} de ${months[d.getMonth()]}, ${d.getFullYear()} — ${h12}:${m}${ampm}`;
-}
-
-function toLocalInput(timestamp: Timestamp): string {
-  const d = timestamp.toDate();
-  const y = d.getFullYear();
-  const mo = (d.getMonth() + 1).toString().padStart(2, '0');
-  const da = d.getDate().toString().padStart(2, '0');
-  const h = d.getHours().toString().padStart(2, '0');
-  const mi = d.getMinutes().toString().padStart(2, '0');
-  return `${y}-${mo}-${da}T${h}:${mi}`;
-}
 
 interface ListSectionProps {
   label: string;
@@ -76,6 +23,10 @@ interface ListSectionProps {
   onRemove: (index: number) => void;
   colorClass: string;
   placeholder: string;
+  clickToEdit: string;
+  addAriaLabel: string;
+  editAriaLabel: string;
+  deleteAriaLabel: string;
 }
 
 function ListSection({
@@ -87,6 +38,10 @@ function ListSection({
   onRemove,
   colorClass,
   placeholder,
+  clickToEdit,
+  addAriaLabel,
+  editAriaLabel,
+  deleteAriaLabel,
 }: ListSectionProps) {
   const [editingIndex, setEditingIndex] = useState<number | null>(null);
 
@@ -101,7 +56,7 @@ function ListSection({
         <button
           onClick={onAdd}
           className="cursor-pointer border-none bg-transparent p-1 text-fg-subtle transition-colors hover:text-fg"
-          aria-label={`Agregar ${label.toLowerCase()}`}
+          aria-label={addAriaLabel}
         >
           <svg
             width="16"
@@ -151,15 +106,13 @@ function ListSection({
                 className="flex-1 cursor-pointer font-serif text-xs leading-relaxed text-fg-muted transition-colors hover:text-fg"
                 onClick={() => setEditingIndex(idx)}
               >
-                {item || (
-                  <em className="text-fg-subtle">Click para editar...</em>
-                )}
+                {item || <em className="text-fg-subtle">{clickToEdit}</em>}
               </p>
               <div className="flex shrink-0 gap-1">
                 <button
                   onClick={() => setEditingIndex(idx)}
                   className="cursor-pointer border-none bg-transparent p-0.5 text-fg-subtle transition-colors hover:text-fg-muted"
-                  aria-label="Editar"
+                  aria-label={editAriaLabel}
                 >
                   <svg
                     width="13"
@@ -177,7 +130,7 @@ function ListSection({
                 <button
                   onClick={() => onRemove(idx)}
                   className="cursor-pointer border-none bg-transparent p-0.5 text-danger-muted transition-colors hover:text-danger"
-                  aria-label="Eliminar"
+                  aria-label={deleteAriaLabel}
                 >
                   <svg
                     width="13"
@@ -203,6 +156,7 @@ function ListSection({
 
 export function DosBanderas() {
   const { user } = useAuth();
+  const { t } = useLanguage();
   const [entries, setEntries] = useState<DosBanderasEntryWithId[]>([]);
   const [loading, setLoading] = useState(true);
   const [deleteTarget, setDeleteTarget] = useState<{
@@ -330,21 +284,25 @@ export function DosBanderas() {
         >
           <polyline points="9 18 15 12 9 6" />
         </svg>
-        {showGuide ? 'Ocultar guia' : 'Ver guia del ejercicio'}
+        {showGuide ? t.nav.hideGuide : t.nav.showGuide}
       </button>
 
       {showGuide && (
         <div className="animate-entry-expand mb-6 border-l-2 border-accent/30 pl-4 font-serif text-xs leading-relaxed text-fg-muted">
           <p>
-            <strong className="text-fg">✨ Polvo de Estrellas:</strong>{' '}
-            Serenidad, flujo, ser tu mismo.
+            <strong className="text-fg">
+              {t.exercises.exercise1.guide.section1Label}
+            </strong>{' '}
+            {t.exercises.exercise1.guide.section1Desc}
           </p>
           <p className="mt-1">
-            <strong className="text-fg">🏴 La Madeja:</strong> Revoltijo,
-            adaptacion forzada, incomodidad, atrapado.
+            <strong className="text-fg">
+              {t.exercises.exercise1.guide.section2Label}
+            </strong>{' '}
+            {t.exercises.exercise1.guide.section2Desc}
           </p>
           <p className="mt-2 italic text-fg-subtle">
-            Registra momentos de ambas banderas cada dia.
+            {t.exercises.exercise1.guide.instruction}
           </p>
         </div>
       )}
@@ -366,13 +324,13 @@ export function DosBanderas() {
           <line x1="12" y1="5" x2="12" y2="19" />
           <line x1="5" y1="12" x2="19" y2="12" />
         </svg>
-        Nuevo registro diario
+        {t.dosBanderas.newRecord}
       </button>
 
       {entries.map((entry, i) => (
         <EntryCard
           key={entry.id}
-          title={formatDate(entry.fecha)}
+          title={formatDate(entry.fecha, t)}
           index={i}
           badge={
             <div className="flex gap-2">
@@ -387,7 +345,7 @@ export function DosBanderas() {
         >
           <div className="mb-3 flex flex-wrap items-center gap-2">
             <label className="text-[0.6rem] font-medium uppercase tracking-wider text-fg-subtle">
-              Fecha/Hora:
+              {t.dosBanderas.dateTimeLabel}
             </label>
             <input
               type="datetime-local"
@@ -398,7 +356,7 @@ export function DosBanderas() {
           </div>
 
           <ListSection
-            label="Polvo de Estrellas"
+            label={t.dosBanderas.section1Label}
             icon="✨"
             items={entry.estrellas}
             onAdd={() => handleAddListItem(entry.id, 'estrellas')}
@@ -413,11 +371,15 @@ export function DosBanderas() {
               })
             }
             colorClass="text-star"
-            placeholder="Agrega momentos de serenidad y autenticidad..."
+            placeholder={t.dosBanderas.section1Placeholder}
+            clickToEdit={t.common.clickToEdit}
+            addAriaLabel={t.common.add(t.dosBanderas.section1Label)}
+            editAriaLabel={t.common.edit}
+            deleteAriaLabel={t.common.delete}
           />
 
           <ListSection
-            label="La Madeja"
+            label={t.dosBanderas.section2Label}
             icon="🏴"
             items={entry.madeja}
             onAdd={() => handleAddListItem(entry.id, 'madeja')}
@@ -432,19 +394,23 @@ export function DosBanderas() {
               })
             }
             colorClass="text-fg-muted"
-            placeholder="Agrega momentos de madeja/supervivencia..."
+            placeholder={t.dosBanderas.section2Placeholder}
+            clickToEdit={t.common.clickToEdit}
+            addAriaLabel={t.common.add(t.dosBanderas.section2Label)}
+            editAriaLabel={t.common.edit}
+            deleteAriaLabel={t.common.delete}
           />
 
           <div className="mb-2">
             <h3 className="mb-1.5 text-[0.65rem] font-medium uppercase tracking-wider text-fg-subtle">
-              ¿Que aprendi hoy?
+              {t.dosBanderas.learningLabel}
             </h3>
             <textarea
               value={entry.aprendizaje}
               onChange={(e) =>
                 handleUpdateAprendizaje(entry.id, e.target.value)
               }
-              placeholder="Reflexion del dia..."
+              placeholder={t.dosBanderas.learningPlaceholder}
               rows={2}
               className="w-full resize-y rounded border border-border bg-transparent p-2.5 font-serif text-xs leading-relaxed text-fg-muted transition-colors focus:border-accent focus:outline-none"
             />
@@ -467,22 +433,20 @@ export function DosBanderas() {
                 <polyline points="3 6 5 6 21 6" />
                 <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2" />
               </svg>
-              Eliminar registro
+              {t.dosBanderas.deleteRecord}
             </button>
           </div>
         </EntryCard>
       ))}
 
-      {entries.length === 0 && (
-        <EmptyState message="Aun no hay registros. Crea tu primer registro diario." />
-      )}
+      {entries.length === 0 && <EmptyState message={t.dosBanderas.noRecords} />}
 
       {deleteTarget && (
         <ConfirmDialog
           message={
             deleteTarget.itemType
-              ? '¿Seguro que quieres eliminar este elemento?'
-              : '¿Seguro que quieres eliminar este registro completo?'
+              ? t.dosBanderas.deleteItemConfirm
+              : t.dosBanderas.deleteRecordConfirm
           }
           onConfirm={confirmDelete}
           onCancel={() => setDeleteTarget(null)}

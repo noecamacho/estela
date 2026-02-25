@@ -1,16 +1,18 @@
 import { useState } from 'react';
 import { flushSync } from 'react-dom';
+import { useLanguage } from '../context/LanguageContext';
 import { DosBanderas } from './DosBanderas';
 import { FreeformExercise } from './FreeformExercise';
 
-const tabs = [
-  { label: 'Dos Banderas', icon: '🏴' },
-  { label: 'Mi Mama', icon: '🕊' },
-  { label: 'El Hombre Ideal', icon: '🪞' },
-];
-
 export function ExerciseTabs() {
   const [activeTab, setActiveTab] = useState(0);
+  const { t } = useLanguage();
+
+  const tabs = [
+    { label: t.exercises.exercise1.name, icon: t.exercises.exercise1.icon },
+    { label: t.exercises.exercise2.name, icon: t.exercises.exercise2.icon },
+    { label: t.exercises.exercise3.name, icon: t.exercises.exercise3.icon },
+  ];
 
   function handleTabChange(index: number) {
     if (index === activeTab) return;
@@ -50,20 +52,20 @@ export function ExerciseTabs() {
         {activeTab === 1 && (
           <FreeformExercise
             exerciseKey="ejercicio2"
-            description="Escribe sobre la epoca con tu mama antes de que se acumulara la desilucion. Recupera el deseo original de conexion."
-            questions="¿Cual es tu primer recuerdo de sentirte cerca de ella? ¿Que esperabas? ¿Cuando empezo a cambiar? ¿Ves algo de lo que querias de ella en lo que buscaste en Maredy?"
-            addLabel="Nueva entrada"
-            emptyMessage="Cuando estes listo, crea tu primera entrada. Sin prisa."
+            description={t.exercises.exercise2.description}
+            questions={t.exercises.exercise2.questions}
+            addLabel={t.exercises.exercise2.addLabel}
+            emptyMessage={t.exercises.exercise2.emptyMessage}
           />
         )}
 
         {activeTab === 2 && (
           <FreeformExercise
             exerciseKey="ejercicio3"
-            description='Corporaliza el "hombre ideal" que Maredy queria. Si existiera como persona real y lo conocieras, ¿seria de tu primer circulo de confianza?'
-            questions="¿Que esperaba ella de un hombre? ¿Que te criticaba? Describelo como persona real. ¿Te caeria bien? ¿De que se enamoro ella realmente: de ti surfeando la ola, o de la version que se adaptaba?"
-            addLabel="Nueva reflexion"
-            emptyMessage="Cuando estes listo, empieza tu primera reflexion."
+            description={t.exercises.exercise3.description}
+            questions={t.exercises.exercise3.questions}
+            addLabel={t.exercises.exercise3.addLabel}
+            emptyMessage={t.exercises.exercise3.emptyMessage}
           />
         )}
       </div>

@@ -1,13 +1,8 @@
 import { useAuth } from '../context/AuthContext';
+import { useLanguage } from '../context/LanguageContext';
 import { ExerciseTabs } from './ExerciseTabs';
 import { ThemeToggle } from './ThemeToggle';
-
-function getGreeting(): string {
-  const h = new Date().getHours();
-  if (h < 12) return 'Buenos dias';
-  if (h < 18) return 'Buenas tardes';
-  return 'Buenas noches';
-}
+import { LanguageToggle } from './LanguageToggle';
 
 function getFirstName(displayName: string | null): string {
   if (!displayName) return '';
@@ -16,7 +11,15 @@ function getFirstName(displayName: string | null): string {
 
 export function AppShell() {
   const { user, signOut } = useAuth();
+  const { t } = useLanguage();
   const firstName = getFirstName(user?.displayName ?? null);
+
+  function getGreeting(): string {
+    const h = new Date().getHours();
+    if (h < 12) return t.greeting.morning;
+    if (h < 18) return t.greeting.afternoon;
+    return t.greeting.evening;
+  }
 
   return (
     <div className="min-h-screen bg-bg">
@@ -28,10 +31,10 @@ export function AppShell() {
               key={i}
               className="flex shrink-0 items-center gap-8 px-4 text-[0.6rem] font-medium uppercase tracking-[0.25em] text-ticker-fg"
             >
-              <span>✦ Dos Banderas</span>
-              <span>✦ Mi Mama</span>
-              <span>✦ El Hombre Ideal</span>
-              <span>✦ Diario de Proceso</span>
+              <span>✦ {t.exercises.exercise1.name}</span>
+              <span>✦ {t.exercises.exercise2.name}</span>
+              <span>✦ {t.exercises.exercise3.name}</span>
+              <span>✦ {t.marquee.journal}</span>
             </span>
           ))}
         </div>
@@ -44,7 +47,7 @@ export function AppShell() {
           <div className="flex items-start justify-between">
             <div className="animate-fade-in">
               <h1 className="text-2xl font-semibold uppercase tracking-[0.1em] text-fg sm:text-3xl">
-                Estela
+                {t.auth.appName}
               </h1>
               <p className="mt-1.5 font-serif text-sm italic text-fg-muted">
                 {getGreeting()}
@@ -52,6 +55,7 @@ export function AppShell() {
               </p>
             </div>
             <div className="flex items-center gap-2">
+              <LanguageToggle />
               <ThemeToggle />
               {user?.photoURL && (
                 <img
@@ -64,7 +68,7 @@ export function AppShell() {
                 onClick={signOut}
                 className="hover-line cursor-pointer bg-transparent px-1 py-0.5 text-[0.65rem] font-medium uppercase tracking-wider text-fg-subtle transition-colors hover:text-fg"
               >
-                Salir
+                {t.nav.logout}
               </button>
             </div>
           </div>

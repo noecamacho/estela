@@ -1,6 +1,8 @@
 import { useEffect, useState } from 'react';
+import { useLanguage } from '../context/LanguageContext';
 
 export function ThemeToggle() {
+  const { t } = useLanguage();
   const [dark, setDark] = useState(() =>
     document.documentElement.classList.contains('dark'),
   );
@@ -23,7 +25,7 @@ export function ThemeToggle() {
     <button
       onClick={() => setDark((d) => !d)}
       className="cursor-pointer bg-transparent p-1.5 text-fg-subtle transition-colors hover:text-fg"
-      aria-label={dark ? 'Modo claro' : 'Modo oscuro'}
+      aria-label={dark ? t.theme.light : t.theme.dark}
     >
       {dark ? (
         <svg

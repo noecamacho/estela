@@ -1,3 +1,5 @@
+import { useLanguage } from '../context/LanguageContext';
+
 interface ConfirmDialogProps {
   message: string;
   onConfirm: () => void;
@@ -9,6 +11,8 @@ export function ConfirmDialog({
   onConfirm,
   onCancel,
 }: ConfirmDialogProps) {
+  const { t } = useLanguage();
+
   return (
     <div
       className="dialog-backdrop fixed inset-0 z-50 flex items-center justify-center bg-black/40 p-4"
@@ -24,13 +28,13 @@ export function ConfirmDialog({
             onClick={onCancel}
             className="cursor-pointer rounded-full border border-border bg-transparent px-4 py-1.5 text-xs font-medium uppercase tracking-wider text-fg-muted transition-colors duration-200 hover:border-border-bold hover:text-fg"
           >
-            Cancelar
+            {t.common.cancel}
           </button>
           <button
             onClick={onConfirm}
             className="cursor-pointer rounded-full border border-danger/30 bg-danger/10 px-4 py-1.5 text-xs font-medium uppercase tracking-wider text-danger transition-colors duration-200 hover:bg-danger/20"
           >
-            Eliminar
+            {t.common.delete}
           </button>
         </div>
       </div>

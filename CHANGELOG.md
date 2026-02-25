@@ -7,6 +7,23 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+
+- Bilingual support (English/Spanish) with language toggle in header and login page
+- `LanguageContext` with `useLanguage` hook for i18n state management
+- Typed translation system (`src/i18n/translations.ts`) with full Spanish and English translations
+- `LanguageToggle` component — persists language preference to localStorage
+- Shared `date-utils` module — centralizes date formatting logic (DRY refactor)
+
+### Changed
+
+- Replaced all personal references (Maredy, Hamid, "Mi Mama", "El Hombre Ideal") with universal therapeutic terms
+- Exercise 2 renamed from "Mi Mama" to "Vinculo Significativo" / "Significant Bond"
+- Exercise 3 renamed from "El Hombre Ideal" to "Expectativas Idealizadas" / "Idealized Expectations"
+- All exercise descriptions and guiding questions rewritten for universal audience
+- All hardcoded Spanish strings extracted to translation system
+- Updated unit tests to reflect new universal exercise names
+
 ## [0.2.0] - 2026-02-25
 
 ### Added

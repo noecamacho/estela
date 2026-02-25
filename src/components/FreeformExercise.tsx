@@ -1,71 +1,18 @@
 import { useEffect, useState } from 'react';
 import { Timestamp } from 'firebase/firestore';
 import { useAuth } from '../context/AuthContext';
+import { useLanguage } from '../context/LanguageContext';
 import {
   subscribeToFreeform,
   addFreeformEntry,
   updateEntry,
   deleteEntry,
 } from '../lib/firestore';
+import { formatDate, toLocalInput } from '../lib/date-utils';
 import type { FreeformEntryWithId } from '../types';
 import { EntryCard } from './EntryCard';
 import { ConfirmDialog } from './ConfirmDialog';
 import { EmptyState } from './EmptyState';
-
-function relativePrefix(d: Date): string {
-  const now = new Date();
-  const today = new Date(now.getFullYear(), now.getMonth(), now.getDate());
-  const target = new Date(d.getFullYear(), d.getMonth(), d.getDate());
-  const diff = Math.round(
-    (today.getTime() - target.getTime()) / (1000 * 60 * 60 * 24),
-  );
-  if (diff === 0) return 'Hoy — ';
-  if (diff === 1) return 'Ayer — ';
-  return '';
-}
-
-function formatDate(timestamp: Timestamp): string {
-  const d = timestamp.toDate();
-  const days = [
-    'Domingo',
-    'Lunes',
-    'Martes',
-    'Miercoles',
-    'Jueves',
-    'Viernes',
-    'Sabado',
-  ];
-  const months = [
-    'enero',
-    'febrero',
-    'marzo',
-    'abril',
-    'mayo',
-    'junio',
-    'julio',
-    'agosto',
-    'septiembre',
-    'octubre',
-    'noviembre',
-    'diciembre',
-  ];
-  const h = d.getHours();
-  const m = d.getMinutes().toString().padStart(2, '0');
-  const ampm = h >= 12 ? 'pm' : 'am';
-  const h12 = h % 12 || 12;
-  const prefix = relativePrefix(d);
-  return `${prefix}${days[d.getDay()]} ${d.getDate()} de ${months[d.getMonth()]}, ${d.getFullYear()} — ${h12}:${m}${ampm}`;
-}
-
-function toLocalInput(timestamp: Timestamp): string {
-  const d = timestamp.toDate();
-  const y = d.getFullYear();
-  const mo = (d.getMonth() + 1).toString().padStart(2, '0');
-  const da = d.getDate().toString().padStart(2, '0');
-  const h = d.getHours().toString().padStart(2, '0');
-  const mi = d.getMinutes().toString().padStart(2, '0');
-  return `${y}-${mo}-${da}T${h}:${mi}`;
-}
 
 interface FreeformExerciseProps {
   exerciseKey: 'ejercicio2' | 'ejercicio3';
@@ -83,6 +30,7 @@ export function FreeformExercise({
   emptyMessage,
 }: FreeformExerciseProps) {
   const { user } = useAuth();
+  const { t } = useLanguage();
   const [entries, setEntries] = useState<FreeformEntryWithId[]>([]);
   const [loading, setLoading] = useState(true);
   const [deleteTarget, setDeleteTarget] = useState<string | null>(null);
@@ -152,17 +100,18 @@ export function FreeformExercise({
         >
           <polyline points="9 18 15 12 9 6" />
         </svg>
-        {showGuide ? 'Ocultar guia' : 'Ver guia del ejercicio'}
+        {showGuide ? t.nav.hideGuide : t.nav.showGuide}
       </button>
 
       {showGuide && (
         <div className="animate-entry-expand mb-6 border-l-2 border-accent/30 pl-4 font-serif text-xs leading-relaxed text-fg-muted">
           <p>
-            <strong className="text-fg">Instruccion de Hamid:</strong>{' '}
+            <strong className="text-fg">{t.freeform.instructionLabel}</strong>{' '}
             {description}
           </p>
           <p className="mt-2">
-            <strong className="text-fg">Preguntas guia:</strong> {questions}
+            <strong className="text-fg">{t.freeform.questionsLabel}</strong>{' '}
+            {questions}
           </p>
         </div>
       )}
@@ -190,13 +139,13 @@ export function FreeformExercise({
       {entries.map((entry, i) => (
         <EntryCard
           key={entry.id}
-          title={entry.titulo || 'Sin titulo'}
-          subtitle={formatDate(entry.fecha)}
+          title={entry.titulo || t.freeform.noTitle}
+          subtitle={formatDate(entry.fecha, t)}
           index={i}
         >
           <div className="mb-3 flex flex-wrap items-center gap-2">
             <label className="text-[0.6rem] font-medium uppercase tracking-wider text-fg-subtle">
-              Fecha:
+              {t.freeform.dateLabel}
             </label>
             <input
               type="datetime-local"
@@ -211,7 +160,7 @@ export function FreeformExercise({
             onChange={(e) =>
               handleUpdateField(entry.id, 'titulo', e.target.value)
             }
-            placeholder="Titulo de esta entrada..."
+            placeholder={t.freeform.titlePlaceholder}
             className="mb-3 w-full border-b border-border bg-transparent pb-2 text-sm font-semibold text-fg placeholder:text-fg-subtle focus:border-accent focus:outline-none"
           />
 
@@ -220,7 +169,7 @@ export function FreeformExercise({
             onChange={(e) =>
               handleUpdateField(entry.id, 'contenido', e.target.value)
             }
-            placeholder="Escribe aqui..."
+            placeholder={t.freeform.contentPlaceholder}
             rows={8}
             className="w-full resize-y rounded border border-border bg-transparent p-3 font-serif text-sm leading-relaxed text-fg-muted placeholder:text-fg-subtle focus:border-accent focus:outline-none"
           />
@@ -242,7 +191,7 @@ export function FreeformExercise({
                 <polyline points="3 6 5 6 21 6" />
                 <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2" />
               </svg>
-              Eliminar entrada
+              {t.freeform.deleteEntry}
             </button>
           </div>
         </EntryCard>
@@ -252,7 +201,7 @@ export function FreeformExercise({
 
       {deleteTarget && (
         <ConfirmDialog
-          message="¿Seguro que quieres eliminar esta entrada?"
+          message={t.freeform.deleteEntryConfirm}
           onConfirm={() => handleDelete(deleteTarget)}
           onCancel={() => setDeleteTarget(null)}
         />

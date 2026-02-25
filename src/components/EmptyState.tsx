@@ -1,8 +1,12 @@
+import { useLanguage } from '../context/LanguageContext';
+
 interface EmptyStateProps {
   message: string;
 }
 
 export function EmptyState({ message }: EmptyStateProps) {
+  const { t } = useLanguage();
+
   return (
     <div className="animate-fade-in mt-16 flex flex-col items-center text-center">
       {/* Decorative element */}
@@ -26,7 +30,7 @@ export function EmptyState({ message }: EmptyStateProps) {
         {message}
       </p>
       <p className="mt-2 text-[0.6rem] uppercase tracking-widest text-fg-subtle/50">
-        Sin prisa, sin presion
+        {t.messages.noHurry}
       </p>
     </div>
   );

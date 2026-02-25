@@ -1,9 +1,12 @@
 import { Navigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
+import { useLanguage } from '../context/LanguageContext';
 import { ThemeToggle } from './ThemeToggle';
+import { LanguageToggle } from './LanguageToggle';
 
 export function LoginPage() {
   const { user, loading, signIn } = useAuth();
+  const { t } = useLanguage();
 
   if (loading) {
     return (
@@ -19,8 +22,9 @@ export function LoginPage() {
 
   return (
     <div className="flex min-h-screen flex-col items-center justify-center bg-bg px-6">
-      {/* Theme toggle — top right */}
-      <div className="fixed top-4 right-4">
+      {/* Theme toggle + Language toggle — top right */}
+      <div className="fixed top-4 right-4 flex items-center gap-1">
+        <LanguageToggle />
         <ThemeToggle />
       </div>
 
@@ -29,14 +33,14 @@ export function LoginPage() {
           className="animate-stagger text-[0.65rem] font-medium uppercase tracking-[0.3em] text-fg-subtle"
           style={{ '--i': 0 } as React.CSSProperties}
         >
-          Diario de Proceso
+          {t.auth.subtitle}
         </p>
 
         <h1
           className="animate-stagger mt-4 text-5xl font-semibold uppercase tracking-[0.15em] text-fg sm:text-6xl"
           style={{ '--i': 1 } as React.CSSProperties}
         >
-          Estela
+          {t.auth.appName}
         </h1>
 
         <div
@@ -48,7 +52,7 @@ export function LoginPage() {
           className="animate-stagger mb-12 font-serif text-sm italic leading-relaxed text-fg-muted"
           style={{ '--i': 3 } as React.CSSProperties}
         >
-          Tu espacio para registrar, reflexionar y crecer
+          {t.auth.tagline}
         </p>
 
         <button
@@ -74,14 +78,14 @@ export function LoginPage() {
               fill="#EA4335"
             />
           </svg>
-          Iniciar sesion con Google
+          {t.auth.signIn}
         </button>
 
         <p
           className="animate-stagger mt-16 text-[0.6rem] font-medium uppercase tracking-[0.2em] text-fg-subtle/50"
           style={{ '--i': 5 } as React.CSSProperties}
         >
-          Ejercicios de Hamid — Sesion 3
+          {t.auth.sessionInfo}
         </p>
       </div>
     </div>
