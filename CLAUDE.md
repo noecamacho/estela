@@ -73,9 +73,9 @@ Estela is a personal therapy exercise journal. Users authenticate with Google an
 
 - Version 4 with CSS-based config (`@tailwindcss/vite` plugin)
 - No `tailwind.config.js` — theme defined in `src/app.css` via `@theme {}`
-- Dark warm theme with custom palette
-- Custom colors: `--color-warm-100` through `--color-warm-900`, `--color-surface`
-- Font: `font-serif` (Georgia, Times New Roman)
+- Semantic CSS token system via custom properties (`--c-bg`, `--c-fg`, `--c-border`, etc.)
+- Light/dark theme: tokens swap between `:root` (light) and `:root.dark` (dark)
+- Fonts: General Sans (UI), Georgia serif (journal content)
 - Mobile-first responsive design
 
 ## Testing
@@ -100,13 +100,15 @@ Estela is a personal therapy exercise journal. Users authenticate with Google an
 - **Semantic Versioning** (semver.org)
 - **Keep a Changelog** format in `CHANGELOG.md`
 - Categories: Added, Changed, Deprecated, Removed, Fixed, Security
+- **Every PR must update `CHANGELOG.md`** — CI enforces this; add entries under `[Unreleased]`
+- When releasing, move `[Unreleased]` entries to a new `[X.Y.Z] - YYYY-MM-DD` section and bump `package.json` version
 - GitHub releases are created automatically on successful deploy to GitHub Pages
 - Version comes from `package.json`, tag format: `v{version}`
-- Release notes extracted from `CHANGELOG.md` with 3 fallback strategies (with `v` prefix, without, generic)
+- Release notes extracted from `CHANGELOG.md` matching `## [{version}]`, with commit-log fallback
 
 ## CI/CD
 
-- **CI (`ci.yml`):** Runs on PRs — lint, format check, typecheck, unit tests, build
+- **CI (`ci.yml`):** Runs on PRs — lint, format check, typecheck, unit tests, build, changelog check
 - **Deploy (`deploy.yml`):** Runs on main push — build, deploy to GitHub Pages, create release
 - Firebase config injected via GitHub secrets (6 `VITE_FIREBASE_*` secrets)
 - SPA routing fix: `cp dist/index.html dist/404.html` in build script

@@ -54,15 +54,20 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v5
+        with:
+          fetch-depth: 0
 
       - name: Get version from package.json
         id: version
-        run: echo "version=v$(node -p "require('./package.json').version")" >> "$GITHUB_OUTPUT"
+        run: |
+          RAW=$(node -p "require('./package.json').version")
+          echo "raw=$RAW" >> "$GITHUB_OUTPUT"
+          echo "tag=v$RAW" >> "$GITHUB_OUTPUT"
 
       - name: Check if release already exists
         id: check
         run: |
-          if gh release view "${{ steps.version.outputs.version }}" > /dev/null 2>&1; then
+          if gh release view "${{ steps.version.outputs.tag }}" > /dev/null 2>&1; then
             echo "exists=true" >> "$GITHUB_OUTPUT"
           else
             echo "exists=false" >> "$GITHUB_OUTPUT"
@@ -72,21 +77,43 @@ jobs:
 
       - name: Extract changelog for this version
         if: steps.check.outputs.exists == 'false'
+        id: notes
         run: |
-          awk '/^## \[${{ steps.version.outputs.version }}/{found=1; next} /^## \[/{if(found) exit} found' CHANGELOG.md | sed 's/^## .*//' | sed '/^$/N;/^\n$/d' > /tmp/release-notes.md
-          # Fallback if awk extraction is empty
+          VERSION="${{ steps.version.outputs.raw }}"
+
+          # Extract the section between this version's header and the next ## header
+          awk -v ver="$VERSION" '
+            $0 ~ "^## \\[" ver "\\]" { found=1; next }
+            /^## \[/ { if (found) exit }
+            found { print }
+          ' CHANGELOG.md > /tmp/release-notes.md
+
+          # Trim leading/trailing blank lines
+          sed -i '/./,$!d' /tmp/release-notes.md
+          sed -i -e :a -e '/^\s*$/{ $d; N; ba; }' /tmp/release-notes.md
+
+          # Fallback if extraction is empty
           if [ ! -s /tmp/release-notes.md ]; then
-            # Try without the v prefix
-            VERSION_NO_V=$(echo "${{ steps.version.outputs.version }}" | sed 's/^v//')
-            awk "/^## \\[${VERSION_NO_V}\\]/{found=1; next} /^## \\[/{if(found) exit} found" CHANGELOG.md | sed '/^$/N;/^\n$/d' > /tmp/release-notes.md
+            echo "No changelog section found for $VERSION — generating from commits." >&2
+            # Get commits since the previous tag (or all commits if no tags exist)
+            PREV_TAG=$(git tag --sort=-v:refname | head -n1 || true)
+            if [ -n "$PREV_TAG" ]; then
+              git log "$PREV_TAG"..HEAD --pretty=format:"- %s" --no-merges > /tmp/release-notes.md
+            else
+              git log --pretty=format:"- %s" --no-merges -20 > /tmp/release-notes.md
+            fi
           fi
+
           # Final fallback
           if [ ! -s /tmp/release-notes.md ]; then
-            echo "Release ${{ steps.version.outputs.version }}" > /tmp/release-notes.md
+            echo "Release ${{ steps.version.outputs.tag }}" > /tmp/release-notes.md
           fi
 
       - name: Create GitHub release
         if: steps.check.outputs.exists == 'false'
-        run: gh release create "${{ steps.version.outputs.version }}" --title "${{ steps.version.outputs.version }}" --notes-file /tmp/release-notes.md
+        run: |
+          gh release create "${{ steps.version.outputs.tag }}" \
+            --title "${{ steps.version.outputs.tag }}" \
+            --notes-file /tmp/release-notes.md
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}

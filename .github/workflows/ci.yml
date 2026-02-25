@@ -9,6 +9,8 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v5
+        with:
+          fetch-depth: 0
 
       - uses: actions/setup-node@v4
         with:
@@ -38,3 +40,16 @@ jobs:
           VITE_FIREBASE_STORAGE_BUCKET: ${{ secrets.VITE_FIREBASE_STORAGE_BUCKET }}
           VITE_FIREBASE_MESSAGING_SENDER_ID: ${{ secrets.VITE_FIREBASE_MESSAGING_SENDER_ID }}
           VITE_FIREBASE_APP_ID: ${{ secrets.VITE_FIREBASE_APP_ID }}
+
+      - name: Changelog updated
+        run: |
+          # Check if CHANGELOG.md was modified in this PR
+          if git diff --name-only origin/main...HEAD | grep -q '^CHANGELOG.md$'; then
+            echo "CHANGELOG.md was updated."
+          else
+            echo "::error::CHANGELOG.md was not updated. Every PR must include a changelog entry."
+            echo ""
+            echo "Add your changes under the [Unreleased] section in CHANGELOG.md using"
+            echo "Keep a Changelog format: Added, Changed, Fixed, Removed, etc."
+            exit 1
+          fi
