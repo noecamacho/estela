@@ -1,0 +1,17 @@
+@import 'tailwindcss';
+
+@theme {
+  --color-surface: #1a1612;
+
+  --color-warm-100: #e8dcc8;
+  --color-warm-200: #d4c4a8;
+  --color-warm-300: #c4a882;
+  --color-warm-400: #b8a888;
+  --color-warm-500: #8a7a60;
+  --color-warm-600: #6a5e4a;
+  --color-warm-700: rgba(196, 168, 130, 0.15);
+  --color-warm-800: rgba(196, 168, 130, 0.08);
+  --color-warm-900: #231e18;
+
+  --font-serif: 'Georgia', 'Times New Roman', serif;
+}
