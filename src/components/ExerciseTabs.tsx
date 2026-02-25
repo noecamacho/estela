@@ -27,15 +27,13 @@ export function ExerciseTabs() {
   return (
     <div>
       {/* Tab bar */}
-      <div className="flex border-b border-warm-800 px-2 sm:px-6">
+      <div className="flex border-b border-border">
         {tabs.map((tab, i) => (
           <button
             key={i}
             onClick={() => handleTabChange(i)}
-            className={`relative flex flex-1 cursor-pointer flex-col items-center gap-1 bg-transparent px-2 py-3.5 font-serif text-[0.72rem] uppercase tracking-wider transition-colors duration-200 ${
-              activeTab === i
-                ? 'text-warm-200'
-                : 'text-warm-600 hover:text-warm-400'
+            className={`relative flex flex-1 cursor-pointer flex-col items-center gap-1 bg-transparent px-2 py-3.5 text-[0.72rem] font-medium uppercase tracking-wider transition-colors duration-200 ${
+              activeTab === i ? 'text-fg' : 'text-fg-subtle hover:text-fg-muted'
             }`}
           >
             <span className="text-base">{tab.icon}</span>
@@ -46,7 +44,7 @@ export function ExerciseTabs() {
       </div>
 
       {/* Tab content */}
-      <div className="tab-content px-5 pt-6 pb-24 sm:px-8">
+      <div className="tab-content pt-8 pb-24">
         {activeTab === 0 && <DosBanderas />}
 
         {activeTab === 1 && (

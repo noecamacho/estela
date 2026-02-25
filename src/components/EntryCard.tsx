@@ -21,12 +21,12 @@ export function EntryCard({
 
   return (
     <div
-      className="entry-card animate-stagger mb-4 overflow-hidden rounded-lg border border-warm-800 bg-warm-900/40"
+      className="entry-card animate-stagger mb-4 overflow-hidden rounded border border-border bg-bg-elevated"
       style={{ '--i': index } as React.CSSProperties}
     >
       <button
         onClick={() => setExpanded(!expanded)}
-        className="flex w-full cursor-pointer items-center justify-between bg-transparent px-4 py-3.5 text-left transition-colors duration-200 hover:bg-warm-800/20"
+        className="flex w-full cursor-pointer items-center justify-between bg-transparent px-4 py-3.5 text-left transition-colors duration-200 hover:bg-accent-muted"
       >
         <div className="flex min-w-0 flex-1 items-center gap-3">
           <svg
@@ -37,14 +37,14 @@ export function EntryCard({
             stroke="currentColor"
             strokeWidth="2.5"
             strokeLinecap="round"
-            className={`shrink-0 text-warm-500 transition-transform duration-300 ${expanded ? 'rotate-90' : ''}`}
+            className={`shrink-0 text-fg-subtle transition-transform duration-300 ${expanded ? 'rotate-90' : ''}`}
           >
             <polyline points="9 18 15 12 9 6" />
           </svg>
           <div className="min-w-0">
-            <p className="truncate text-sm text-warm-200">{title}</p>
+            <p className="truncate text-sm font-medium text-fg">{title}</p>
             {subtitle && (
-              <p className="mt-0.5 text-[0.62rem] uppercase tracking-wider text-warm-600">
+              <p className="mt-0.5 text-[0.62rem] uppercase tracking-wider text-fg-subtle">
                 {subtitle}
               </p>
             )}
@@ -54,7 +54,7 @@ export function EntryCard({
       </button>
 
       {expanded && (
-        <div className="animate-entry-expand border-t border-warm-800 px-4 py-3">
+        <div className="animate-entry-expand border-t border-border px-4 py-3">
           {children}
         </div>
       )}

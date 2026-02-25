@@ -122,20 +122,20 @@ export function FreeformExercise({
   return (
     <div>
       {/* Info box — editorial left-accent */}
-      <div className="mb-6 border-l-2 border-warm-500/30 pl-4 text-xs leading-relaxed text-warm-500">
+      <div className="mb-6 border-l-2 border-accent/30 pl-4 font-serif text-xs leading-relaxed text-fg-muted">
         <p>
-          <strong className="text-warm-300">Instruccion de Hamid:</strong>{' '}
+          <strong className="text-fg">Instruccion de Hamid:</strong>{' '}
           {description}
         </p>
         <p className="mt-2">
-          <strong className="text-warm-300">Preguntas guia:</strong> {questions}
+          <strong className="text-fg">Preguntas guia:</strong> {questions}
         </p>
       </div>
 
       {/* Add button — pill style */}
       <button
         onClick={handleAdd}
-        className="mb-6 flex w-full cursor-pointer items-center justify-center gap-2 rounded-full border border-warm-600/30 bg-transparent py-3 font-serif text-sm text-warm-400 transition-all duration-300 hover:border-warm-500/50 hover:text-warm-300"
+        className="mb-6 flex w-full cursor-pointer items-center justify-center gap-2 rounded-full border border-border bg-transparent py-3 text-sm font-medium text-fg-muted transition-all duration-300 hover:border-border-bold hover:text-fg"
       >
         <svg
           width="16"
@@ -160,14 +160,14 @@ export function FreeformExercise({
           index={i}
         >
           <div className="mb-3 flex flex-wrap items-center gap-2">
-            <label className="text-[0.6rem] uppercase tracking-wider text-warm-600">
+            <label className="text-[0.6rem] font-medium uppercase tracking-wider text-fg-subtle">
               Fecha:
             </label>
             <input
               type="datetime-local"
               value={toLocalInput(entry.fecha)}
               onChange={(e) => handleUpdateDate(entry.id, e.target.value)}
-              className="rounded-lg border border-warm-700 bg-black/20 px-2 py-1 font-serif text-xs text-warm-300 transition-colors focus:border-warm-500/40 focus:outline-none"
+              className="rounded border border-border bg-transparent px-2 py-1 font-serif text-xs text-fg-muted transition-colors focus:border-accent focus:outline-none"
             />
           </div>
 
@@ -177,7 +177,7 @@ export function FreeformExercise({
               handleUpdateField(entry.id, 'titulo', e.target.value)
             }
             placeholder="Titulo de esta entrada..."
-            className="mb-3 w-full rounded-lg border border-warm-800 bg-black/15 p-2.5 font-serif text-sm font-semibold text-warm-200 transition-colors focus:border-warm-500/40 focus:outline-none"
+            className="mb-3 w-full border-b border-border bg-transparent pb-2 text-sm font-semibold text-fg placeholder:text-fg-subtle focus:border-accent focus:outline-none"
           />
 
           <textarea
@@ -187,13 +187,13 @@ export function FreeformExercise({
             }
             placeholder="Escribe aqui..."
             rows={8}
-            className="w-full resize-y rounded-lg border border-warm-800 bg-black/15 p-3 font-serif text-xs leading-relaxed text-warm-400 transition-colors focus:border-warm-500/40 focus:outline-none"
+            className="w-full resize-y rounded border border-border bg-transparent p-3 font-serif text-sm leading-relaxed text-fg-muted placeholder:text-fg-subtle focus:border-accent focus:outline-none"
           />
 
-          <div className="mt-3 flex justify-end border-t border-warm-800/50 pt-3">
+          <div className="mt-3 flex justify-end border-t border-border pt-3">
             <button
               onClick={() => setDeleteTarget(entry.id)}
-              className="hover-line inline-flex cursor-pointer items-center gap-1.5 border-none bg-transparent p-1 font-serif text-[0.62rem] uppercase tracking-wider text-red-400/40 transition-colors hover:text-red-400"
+              className="hover-line inline-flex cursor-pointer items-center gap-1.5 border-none bg-transparent p-1 text-[0.62rem] font-medium uppercase tracking-wider text-danger-muted transition-colors hover:text-danger"
             >
               <svg
                 width="12"

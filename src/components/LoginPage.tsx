@@ -1,12 +1,13 @@
 import { Navigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
+import { ThemeToggle } from './ThemeToggle';
 
 export function LoginPage() {
   const { user, loading, signIn } = useAuth();
 
   if (loading) {
     return (
-      <div className="flex min-h-screen items-center justify-center bg-surface font-serif">
+      <div className="flex min-h-screen items-center justify-center bg-bg">
         <div className="loading-spinner" />
       </div>
     );
@@ -17,29 +18,34 @@ export function LoginPage() {
   }
 
   return (
-    <div className="flex min-h-screen flex-col items-center justify-center bg-surface px-6 font-serif">
+    <div className="flex min-h-screen flex-col items-center justify-center bg-bg px-6">
+      {/* Theme toggle — top right */}
+      <div className="fixed top-4 right-4">
+        <ThemeToggle />
+      </div>
+
       <div className="w-full max-w-md text-center">
         <p
-          className="animate-stagger text-[0.65rem] uppercase tracking-[0.3em] text-warm-500"
+          className="animate-stagger text-[0.65rem] font-medium uppercase tracking-[0.3em] text-fg-subtle"
           style={{ '--i': 0 } as React.CSSProperties}
         >
           Diario de Proceso
         </p>
 
         <h1
-          className="animate-stagger mt-4 text-5xl font-light uppercase tracking-[0.2em] text-warm-100 sm:text-6xl"
+          className="animate-stagger mt-4 text-5xl font-semibold uppercase tracking-[0.15em] text-fg sm:text-6xl"
           style={{ '--i': 1 } as React.CSSProperties}
         >
           Estela
         </h1>
 
         <div
-          className="animate-stagger mx-auto mt-6 mb-8 h-px w-16 bg-warm-500/40"
+          className="animate-stagger mx-auto mt-6 mb-8 h-px w-16 bg-border-bold"
           style={{ '--i': 2 } as React.CSSProperties}
         />
 
         <p
-          className="animate-stagger mb-12 text-sm italic leading-relaxed text-warm-500"
+          className="animate-stagger mb-12 font-serif text-sm italic leading-relaxed text-fg-muted"
           style={{ '--i': 3 } as React.CSSProperties}
         >
           Tu espacio para registrar, reflexionar y crecer
@@ -47,7 +53,7 @@ export function LoginPage() {
 
         <button
           onClick={signIn}
-          className="animate-stagger mx-auto flex w-full max-w-xs cursor-pointer items-center justify-center gap-3 rounded-full border border-warm-600/30 bg-warm-900/60 px-8 py-3.5 font-serif text-sm tracking-wide text-warm-200 transition-all duration-300 hover:border-warm-500/50 hover:bg-warm-900/80 hover:text-warm-100"
+          className="animate-stagger mx-auto flex w-full max-w-xs cursor-pointer items-center justify-center gap-3 rounded-full border border-border bg-transparent px-8 py-3.5 text-sm font-medium tracking-wide text-fg transition-all duration-300 hover:border-border-bold hover:bg-accent-muted"
           style={{ '--i': 4 } as React.CSSProperties}
         >
           <svg width="18" height="18" viewBox="0 0 24 24">
@@ -72,7 +78,7 @@ export function LoginPage() {
         </button>
 
         <p
-          className="animate-stagger mt-16 text-[0.6rem] uppercase tracking-[0.2em] text-warm-600/50"
+          className="animate-stagger mt-16 text-[0.6rem] font-medium uppercase tracking-[0.2em] text-fg-subtle/50"
           style={{ '--i': 5 } as React.CSSProperties}
         >
           Ejercicios de Hamid — Sesion 3

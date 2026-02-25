@@ -4,8 +4,24 @@
     <meta charset="UTF-8" />
     <link rel="icon" type="image/svg+xml" href="/vite.svg" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta name="theme-color" content="#1a1612" />
+    <meta name="theme-color" content="#faf9f7" />
+    <link rel="preconnect" href="https://api.fontshare.com" crossorigin />
+    <link
+      href="https://api.fontshare.com/v2/css?f[]=general-sans@400,500,600&display=swap"
+      rel="stylesheet"
+    />
     <title>Estela — Diario de Proceso</title>
+    <script>
+      (function () {
+        var s = localStorage.getItem('theme');
+        var d = s
+          ? s === 'dark'
+          : window.matchMedia('(prefers-color-scheme: dark)').matches;
+        if (d) document.documentElement.classList.add('dark');
+        var m = document.querySelector('meta[name="theme-color"]');
+        if (m) m.setAttribute('content', d ? '#1a1612' : '#faf9f7');
+      })();
+    </script>
   </head>
   <body>
     <div id="root"></div>

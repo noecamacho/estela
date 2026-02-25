@@ -81,13 +81,13 @@ function ListSection({
     <div className="mb-4">
       <div className="mb-2 flex items-center justify-between">
         <h3
-          className={`text-[0.7rem] uppercase tracking-wider font-normal ${colorClass}`}
+          className={`text-[0.7rem] font-medium uppercase tracking-wider ${colorClass}`}
         >
           {icon} {label}
         </h3>
         <button
           onClick={onAdd}
-          className="cursor-pointer border-none bg-transparent p-1 text-warm-500 transition-colors hover:text-warm-300"
+          className="cursor-pointer border-none bg-transparent p-1 text-fg-subtle transition-colors hover:text-fg"
           aria-label={`Agregar ${label.toLowerCase()}`}
         >
           <svg
@@ -106,12 +106,14 @@ function ListSection({
       </div>
 
       {items.length === 0 && (
-        <p className="text-xs italic text-warm-600">{placeholder}</p>
+        <p className="font-serif text-xs italic text-fg-subtle">
+          {placeholder}
+        </p>
       )}
 
       {items.map((item, idx) => (
         <div key={idx} className="mb-1.5 flex items-start gap-2">
-          <span className="mt-1 shrink-0 text-[0.6rem] text-warm-600">
+          <span className="mt-1 shrink-0 text-[0.6rem] text-fg-subtle">
             {icon === '✨' ? '✦' : '◆'}
           </span>
 
@@ -127,23 +129,23 @@ function ListSection({
                 onKeyDown={(e) => {
                   if (e.key === 'Escape') setEditingIndex(null);
                 }}
-                className="min-h-[3rem] flex-1 resize-y rounded-lg border border-warm-700 bg-black/30 p-2 font-serif text-xs leading-relaxed text-warm-200 transition-colors focus:border-warm-500/40 focus:outline-none"
+                className="min-h-[3rem] flex-1 resize-y rounded border border-border bg-transparent p-2 font-serif text-xs leading-relaxed text-fg transition-colors focus:border-accent focus:outline-none"
               />
             </div>
           ) : (
             <div className="flex flex-1 items-start justify-between gap-1">
               <p
-                className="flex-1 cursor-pointer text-xs leading-relaxed text-warm-400 transition-colors hover:text-warm-300"
+                className="flex-1 cursor-pointer font-serif text-xs leading-relaxed text-fg-muted transition-colors hover:text-fg"
                 onClick={() => setEditingIndex(idx)}
               >
                 {item || (
-                  <em className="text-warm-600">Click para editar...</em>
+                  <em className="text-fg-subtle">Click para editar...</em>
                 )}
               </p>
               <div className="flex shrink-0 gap-1">
                 <button
                   onClick={() => setEditingIndex(idx)}
-                  className="cursor-pointer border-none bg-transparent p-0.5 text-warm-600 transition-colors hover:text-warm-400"
+                  className="cursor-pointer border-none bg-transparent p-0.5 text-fg-subtle transition-colors hover:text-fg-muted"
                   aria-label="Editar"
                 >
                   <svg
@@ -161,7 +163,7 @@ function ListSection({
                 </button>
                 <button
                   onClick={() => onRemove(idx)}
-                  className="cursor-pointer border-none bg-transparent p-0.5 text-red-400/40 transition-colors hover:text-red-400"
+                  className="cursor-pointer border-none bg-transparent p-0.5 text-danger-muted transition-colors hover:text-danger"
                   aria-label="Eliminar"
                 >
                   <svg
@@ -298,16 +300,16 @@ export function DosBanderas() {
   return (
     <div>
       {/* Info box — editorial left-accent */}
-      <div className="mb-6 border-l-2 border-warm-500/30 pl-4 text-xs leading-relaxed text-warm-500">
+      <div className="mb-6 border-l-2 border-accent/30 pl-4 font-serif text-xs leading-relaxed text-fg-muted">
         <p>
-          <strong className="text-warm-300">✨ Polvo de Estrellas:</strong>{' '}
-          Serenidad, flujo, ser tu mismo.
+          <strong className="text-fg">✨ Polvo de Estrellas:</strong> Serenidad,
+          flujo, ser tu mismo.
         </p>
         <p className="mt-1">
-          <strong className="text-warm-300">🏴 La Madeja:</strong> Revoltijo,
+          <strong className="text-fg">🏴 La Madeja:</strong> Revoltijo,
           adaptacion forzada, incomodidad, atrapado.
         </p>
-        <p className="mt-2 italic">
+        <p className="mt-2 italic text-fg-subtle">
           Registra momentos de ambas banderas cada dia.
         </p>
       </div>
@@ -315,7 +317,7 @@ export function DosBanderas() {
       {/* Add button — pill style */}
       <button
         onClick={handleAdd}
-        className="mb-6 flex w-full cursor-pointer items-center justify-center gap-2 rounded-full border border-warm-600/30 bg-transparent py-3 font-serif text-sm text-warm-400 transition-all duration-300 hover:border-warm-500/50 hover:text-warm-300"
+        className="mb-6 flex w-full cursor-pointer items-center justify-center gap-2 rounded-full border border-border bg-transparent py-3 text-sm font-medium text-fg-muted transition-all duration-300 hover:border-border-bold hover:text-fg"
       >
         <svg
           width="16"
@@ -339,24 +341,24 @@ export function DosBanderas() {
           index={i}
           badge={
             <div className="flex gap-2">
-              <span className="pill text-warm-500">
+              <span className="pill text-fg-muted">
                 ✦ {entry.estrellas.length}
               </span>
-              <span className="pill text-warm-500">
+              <span className="pill text-fg-muted">
                 ◆ {entry.madeja.length}
               </span>
             </div>
           }
         >
           <div className="mb-3 flex flex-wrap items-center gap-2">
-            <label className="text-[0.6rem] uppercase tracking-wider text-warm-600">
+            <label className="text-[0.6rem] font-medium uppercase tracking-wider text-fg-subtle">
               Fecha/Hora:
             </label>
             <input
               type="datetime-local"
               value={toLocalInput(entry.fecha)}
               onChange={(e) => handleUpdateDate(entry.id, e.target.value)}
-              className="rounded-lg border border-warm-700 bg-black/20 px-2 py-1 font-serif text-xs text-warm-300 transition-colors focus:border-warm-500/40 focus:outline-none"
+              className="rounded border border-border bg-transparent px-2 py-1 font-serif text-xs text-fg-muted transition-colors focus:border-accent focus:outline-none"
             />
           </div>
 
@@ -375,7 +377,7 @@ export function DosBanderas() {
                 itemIndex: idx,
               })
             }
-            colorClass="text-amber-400/80"
+            colorClass="text-star"
             placeholder="Agrega momentos de serenidad y autenticidad..."
           />
 
@@ -394,12 +396,12 @@ export function DosBanderas() {
                 itemIndex: idx,
               })
             }
-            colorClass="text-warm-400"
+            colorClass="text-fg-muted"
             placeholder="Agrega momentos de madeja/supervivencia..."
           />
 
           <div className="mb-2">
-            <h3 className="mb-1.5 text-[0.65rem] uppercase tracking-wider text-warm-500">
+            <h3 className="mb-1.5 text-[0.65rem] font-medium uppercase tracking-wider text-fg-subtle">
               ¿Que aprendi hoy?
             </h3>
             <textarea
@@ -409,14 +411,14 @@ export function DosBanderas() {
               }
               placeholder="Reflexion del dia..."
               rows={2}
-              className="w-full resize-y rounded-lg border border-warm-800 bg-black/15 p-2.5 font-serif text-xs leading-relaxed text-warm-400 transition-colors focus:border-warm-500/40 focus:outline-none"
+              className="w-full resize-y rounded border border-border bg-transparent p-2.5 font-serif text-xs leading-relaxed text-fg-muted transition-colors focus:border-accent focus:outline-none"
             />
           </div>
 
-          <div className="mt-3 flex justify-end border-t border-warm-800/50 pt-3">
+          <div className="mt-3 flex justify-end border-t border-border pt-3">
             <button
               onClick={() => setDeleteTarget({ entryId: entry.id })}
-              className="hover-line inline-flex cursor-pointer items-center gap-1.5 border-none bg-transparent p-1 font-serif text-[0.62rem] uppercase tracking-wider text-red-400/40 transition-colors hover:text-red-400"
+              className="hover-line inline-flex cursor-pointer items-center gap-1.5 border-none bg-transparent p-1 text-[0.62rem] font-medium uppercase tracking-wider text-danger-muted transition-colors hover:text-danger"
             >
               <svg
                 width="12"

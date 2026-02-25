@@ -1,33 +1,88 @@
 @import 'tailwindcss';
 
 @theme {
-  --color-surface: #1a1612;
-  --color-surface-elevated: #231e18;
+  /* Semantic tokens — resolved via CSS custom properties for theming */
+  --color-bg: var(--c-bg);
+  --color-bg-elevated: var(--c-bg-elevated);
+  --color-fg: var(--c-fg);
+  --color-fg-muted: var(--c-fg-muted);
+  --color-fg-subtle: var(--c-fg-subtle);
+  --color-border: var(--c-border);
+  --color-border-bold: var(--c-border-bold);
+  --color-accent: var(--c-accent);
+  --color-accent-muted: var(--c-accent-muted);
+  --color-star: var(--c-star);
+  --color-danger: var(--c-danger);
+  --color-danger-muted: var(--c-danger-muted);
+  --color-ticker-bg: var(--c-ticker-bg);
+  --color-ticker-fg: var(--c-ticker-fg);
 
-  --color-warm-50: #f5efe6;
-  --color-warm-100: #e8dcc8;
-  --color-warm-200: #d4c4a8;
-  --color-warm-300: #c4a882;
-  --color-warm-400: #b8a888;
-  --color-warm-500: #8a7a60;
-  --color-warm-600: #6a5e4a;
-  --color-warm-700: rgba(196, 168, 130, 0.15);
-  --color-warm-800: rgba(196, 168, 130, 0.08);
-  --color-warm-900: #231e18;
-
-  --color-accent: #c4a882;
-
+  /* Fonts — General Sans matches Fyrre Magazine */
+  --font-sans: 'General Sans', system-ui, -apple-system, sans-serif;
   --font-serif: 'Georgia', 'Times New Roman', serif;
+}
+
+/* ─── Light Theme (default) ─── */
+
+:root {
+  --c-bg: #faf9f7;
+  --c-bg-elevated: #f2f0ec;
+  --c-fg: #1a1612;
+  --c-fg-muted: #6a5e4a;
+  --c-fg-subtle: #a09888;
+  --c-border: #e8e2d8;
+  --c-border-bold: #1a1612;
+  --c-accent: #1a1612;
+  --c-accent-muted: rgba(26, 22, 18, 0.06);
+  --c-star: #b45309;
+  --c-danger: #dc2626;
+  --c-danger-muted: rgba(220, 38, 38, 0.5);
+  --c-ticker-bg: #0a0a0a;
+  --c-ticker-fg: rgba(255, 255, 255, 0.5);
+
+  interpolate-size: allow-keywords;
+  color-scheme: light;
+}
+
+/* ─── Dark Theme ─── */
+
+:root.dark {
+  --c-bg: #1a1612;
+  --c-bg-elevated: #231e18;
+  --c-fg: #e8dcc8;
+  --c-fg-muted: #8a7a60;
+  --c-fg-subtle: #5a4e3a;
+  --c-border: rgba(196, 168, 130, 0.12);
+  --c-border-bold: rgba(196, 168, 130, 0.25);
+  --c-accent: #c4a882;
+  --c-accent-muted: rgba(196, 168, 130, 0.08);
+  --c-star: #fbbf24;
+  --c-danger: #f87171;
+  --c-danger-muted: rgba(248, 113, 113, 0.4);
+  --c-ticker-bg: #231e18;
+  --c-ticker-fg: rgba(196, 168, 130, 0.35);
+
+  color-scheme: dark;
 }
 
 /* ─── Global ─── */
 
-:root {
-  interpolate-size: allow-keywords;
-}
-
 html {
   scroll-behavior: smooth;
+}
+
+body {
+  background-color: var(--c-bg);
+  color: var(--c-fg);
+  font-family: var(--font-sans);
+  transition: background-color 0.3s ease;
+}
+
+input,
+textarea,
+select,
+button {
+  font-family: inherit;
 }
 
 /* Scrollbar */
@@ -35,14 +90,11 @@ html {
   width: 5px;
 }
 ::-webkit-scrollbar-track {
-  background: var(--color-surface);
+  background: var(--c-bg);
 }
 ::-webkit-scrollbar-thumb {
-  background: rgba(196, 168, 130, 0.18);
+  background: var(--c-border-bold);
   border-radius: 3px;
-}
-::-webkit-scrollbar-thumb:hover {
-  background: rgba(196, 168, 130, 0.32);
 }
 
 /* ─── View Transitions ─── */
@@ -146,16 +198,6 @@ html {
   }
 }
 
-@keyframes pulse-glow {
-  0%,
-  100% {
-    opacity: 0.4;
-  }
-  50% {
-    opacity: 1;
-  }
-}
-
 /* ─── Animation Utilities ─── */
 
 .animate-fade-in {
@@ -201,7 +243,7 @@ html {
   left: 0;
   right: 0;
   height: 2px;
-  background: var(--color-accent);
+  background: var(--c-accent);
   animation: underline-in 0.3s ease-out both;
 }
 
@@ -215,7 +257,11 @@ html {
 
 .entry-card:hover {
   transform: translateY(-1px);
-  box-shadow: 0 4px 24px rgba(0, 0, 0, 0.2);
+  box-shadow: 0 4px 24px rgba(0, 0, 0, 0.08);
+}
+
+:root.dark .entry-card:hover {
+  box-shadow: 0 4px 24px rgba(0, 0, 0, 0.25);
 }
 
 /* ─── Dialog (@starting-style) ─── */
@@ -251,8 +297,8 @@ html {
 .loading-spinner {
   width: 20px;
   height: 20px;
-  border: 2px solid rgba(196, 168, 130, 0.12);
-  border-top-color: var(--color-accent);
+  border: 2px solid var(--c-border);
+  border-top-color: var(--c-accent);
   border-radius: 50%;
   animation: spin 0.7s linear infinite;
 }
@@ -299,7 +345,7 @@ html {
   display: inline-flex;
   align-items: center;
   border-radius: 9999px;
-  border: 1px solid rgba(196, 168, 130, 0.15);
+  border: 1px solid var(--c-border);
   padding: 0.2rem 0.6rem;
   font-size: 0.6rem;
   text-transform: uppercase;
