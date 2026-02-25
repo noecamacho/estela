@@ -30,6 +30,21 @@ jobs:
 
       - run: npm ci
 
+      - name: Lint
+        run: npm run lint
+
+      - name: Format check
+        run: npm run format:check
+
+      - name: Type check
+        run: npm run typecheck
+
+      - name: Unit tests
+        run: npm run test
+
+      - name: Install Playwright browsers
+        run: npx playwright install --with-deps chromium
+
       - name: Build
         run: npm run build
         env:
@@ -39,6 +54,9 @@ jobs:
           VITE_FIREBASE_STORAGE_BUCKET: ${{ secrets.VITE_FIREBASE_STORAGE_BUCKET }}
           VITE_FIREBASE_MESSAGING_SENDER_ID: ${{ secrets.VITE_FIREBASE_MESSAGING_SENDER_ID }}
           VITE_FIREBASE_APP_ID: ${{ secrets.VITE_FIREBASE_APP_ID }}
+
+      - name: E2E tests
+        run: npm run test:e2e
 
       - uses: actions/configure-pages@v5
 

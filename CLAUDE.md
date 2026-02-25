@@ -123,8 +123,8 @@ Estela is a personal therapy exercise journal. Users authenticate with Google an
 
 ## CI/CD
 
-- **CI (`ci.yml`):** Runs on PRs — lint, format check, typecheck, unit tests, build, changelog check
-- **Deploy (`deploy.yml`):** Runs on main push — build, deploy to GitHub Pages, create release
+- **CI (`ci.yml`):** Runs on PRs — lint, format check, typecheck, unit tests, build, E2E tests, changelog check
+- **Deploy (`deploy.yml`):** Runs on main push — lint, format check, typecheck, unit tests, build, E2E tests, deploy to GitHub Pages, create release
 - Firebase config injected via GitHub secrets (6 `VITE_FIREBASE_*` secrets)
 - SPA routing fix: `cp dist/index.html dist/404.html` in build script
 - GitHub Pages must be enabled (`build_type=workflow`) BEFORE first deploy workflow runs
