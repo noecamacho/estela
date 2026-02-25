@@ -2,8 +2,21 @@ import { useAuth } from '../context/AuthContext';
 import { ExerciseTabs } from './ExerciseTabs';
 import { ThemeToggle } from './ThemeToggle';
 
+function getGreeting(): string {
+  const h = new Date().getHours();
+  if (h < 12) return 'Buenos dias';
+  if (h < 18) return 'Buenas tardes';
+  return 'Buenas noches';
+}
+
+function getFirstName(displayName: string | null): string {
+  if (!displayName) return '';
+  return displayName.split(' ')[0];
+}
+
 export function AppShell() {
   const { user, signOut } = useAuth();
+  const firstName = getFirstName(user?.displayName ?? null);
 
   return (
     <div className="min-h-screen bg-bg">
@@ -33,8 +46,9 @@ export function AppShell() {
               <h1 className="text-2xl font-semibold uppercase tracking-[0.1em] text-fg sm:text-3xl">
                 Estela
               </h1>
-              <p className="mt-1 text-[0.65rem] font-medium uppercase tracking-[0.2em] text-fg-subtle">
-                Ejercicios de Hamid — Sesion 3
+              <p className="mt-1.5 font-serif text-sm italic text-fg-muted">
+                {getGreeting()}
+                {firstName ? `, ${firstName}` : ''}
               </p>
             </div>
             <div className="flex items-center gap-2">

@@ -12,6 +12,18 @@ import { EntryCard } from './EntryCard';
 import { ConfirmDialog } from './ConfirmDialog';
 import { EmptyState } from './EmptyState';
 
+function relativePrefix(d: Date): string {
+  const now = new Date();
+  const today = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+  const target = new Date(d.getFullYear(), d.getMonth(), d.getDate());
+  const diff = Math.round(
+    (today.getTime() - target.getTime()) / (1000 * 60 * 60 * 24),
+  );
+  if (diff === 0) return 'Hoy — ';
+  if (diff === 1) return 'Ayer — ';
+  return '';
+}
+
 function formatDate(timestamp: Timestamp): string {
   const d = timestamp.toDate();
   const days = [
@@ -41,7 +53,8 @@ function formatDate(timestamp: Timestamp): string {
   const m = d.getMinutes().toString().padStart(2, '0');
   const ampm = h >= 12 ? 'pm' : 'am';
   const h12 = h % 12 || 12;
-  return `${days[d.getDay()]} ${d.getDate()} de ${months[d.getMonth()]}, ${d.getFullYear()} — ${h12}:${m}${ampm}`;
+  const prefix = relativePrefix(d);
+  return `${prefix}${days[d.getDay()]} ${d.getDate()} de ${months[d.getMonth()]}, ${d.getFullYear()} — ${h12}:${m}${ampm}`;
 }
 
 function toLocalInput(timestamp: Timestamp): string {
@@ -73,6 +86,7 @@ export function FreeformExercise({
   const [entries, setEntries] = useState<FreeformEntryWithId[]>([]);
   const [loading, setLoading] = useState(true);
   const [deleteTarget, setDeleteTarget] = useState<string | null>(null);
+  const [showGuide, setShowGuide] = useState(false);
 
   useEffect(() => {
     if (!user) return;
@@ -121,16 +135,37 @@ export function FreeformExercise({
 
   return (
     <div>
-      {/* Info box — editorial left-accent */}
-      <div className="mb-6 border-l-2 border-accent/30 pl-4 font-serif text-xs leading-relaxed text-fg-muted">
-        <p>
-          <strong className="text-fg">Instruccion de Hamid:</strong>{' '}
-          {description}
-        </p>
-        <p className="mt-2">
-          <strong className="text-fg">Preguntas guia:</strong> {questions}
-        </p>
-      </div>
+      {/* Collapsible instructions — progressive disclosure */}
+      <button
+        onClick={() => setShowGuide(!showGuide)}
+        className="mb-3 flex cursor-pointer items-center gap-1.5 bg-transparent text-[0.7rem] font-medium uppercase tracking-wider text-fg-subtle transition-colors hover:text-fg-muted"
+      >
+        <svg
+          width="10"
+          height="10"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          strokeWidth="2.5"
+          strokeLinecap="round"
+          className={`transition-transform duration-200 ${showGuide ? 'rotate-90' : ''}`}
+        >
+          <polyline points="9 18 15 12 9 6" />
+        </svg>
+        {showGuide ? 'Ocultar guia' : 'Ver guia del ejercicio'}
+      </button>
+
+      {showGuide && (
+        <div className="animate-entry-expand mb-6 border-l-2 border-accent/30 pl-4 font-serif text-xs leading-relaxed text-fg-muted">
+          <p>
+            <strong className="text-fg">Instruccion de Hamid:</strong>{' '}
+            {description}
+          </p>
+          <p className="mt-2">
+            <strong className="text-fg">Preguntas guia:</strong> {questions}
+          </p>
+        </div>
+      )}
 
       {/* Add button — pill style */}
       <button

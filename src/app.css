@@ -85,6 +85,28 @@ button {
   font-family: inherit;
 }
 
+/* Selection color */
+::selection {
+  background: var(--c-accent);
+  color: var(--c-bg);
+}
+
+/* Focus-visible accessibility ring */
+:focus-visible {
+  outline: 2px solid var(--c-accent);
+  outline-offset: 2px;
+}
+
+input:focus-visible,
+textarea:focus-visible {
+  outline: none;
+}
+
+/* Active press state for buttons */
+button:active:not(:disabled) {
+  transform: scale(0.98);
+}
+
 /* Scrollbar */
 ::-webkit-scrollbar {
   width: 5px;
