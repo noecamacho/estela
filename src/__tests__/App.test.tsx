@@ -3,6 +3,45 @@ import { render, screen } from '@testing-library/react';
 import { MemoryRouter } from 'react-router-dom';
 import App from '../App';
 
+vi.mock('../lib/firebase', () => ({
+  auth: {},
+  db: {},
+}));
+
+vi.mock('../lib/firestore', () => ({
+  subscribeToDosBanderas: vi.fn(
+    (_uid: string, callback: (entries: unknown[]) => void) => {
+      queueMicrotask(() => callback([]));
+      return vi.fn();
+    },
+  ),
+  subscribeToFreeform: vi.fn(
+    (_uid: string, _key: string, callback: (entries: unknown[]) => void) => {
+      queueMicrotask(() => callback([]));
+      return vi.fn();
+    },
+  ),
+  addDosBanderasEntry: vi.fn(),
+  addFreeformEntry: vi.fn(),
+  updateEntry: vi.fn(),
+  deleteEntry: vi.fn(),
+}));
+
+vi.mock('firebase/firestore', () => ({
+  Timestamp: {
+    now: () => ({ seconds: 1000, nanoseconds: 0 }),
+    fromDate: (d: Date) => ({ seconds: d.getTime() / 1000, nanoseconds: 0 }),
+  },
+}));
+
+vi.mock('firebase/auth', () => ({
+  getAuth: vi.fn(),
+  onAuthStateChanged: vi.fn(),
+  signInWithPopup: vi.fn(),
+  GoogleAuthProvider: vi.fn(),
+  signOut: vi.fn(),
+}));
+
 vi.mock('../context/AuthContext', () => ({
   useAuth: () => ({
     user: null,
