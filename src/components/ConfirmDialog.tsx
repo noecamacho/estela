@@ -11,24 +11,24 @@ export function ConfirmDialog({
 }: ConfirmDialogProps) {
   return (
     <div
-      className="fixed inset-0 z-50 flex items-center justify-center bg-black/70 p-4"
+      className="dialog-backdrop fixed inset-0 z-50 flex items-center justify-center bg-black/60 p-4"
       onClick={onCancel}
     >
       <div
         onClick={(e) => e.stopPropagation()}
-        className="w-full max-w-xs rounded-xl border border-warm-700 bg-warm-900 p-5"
+        className="dialog-panel w-full max-w-xs rounded-xl border border-warm-700 bg-warm-900 p-6"
       >
-        <p className="mb-4 text-sm leading-relaxed text-warm-200">{message}</p>
-        <div className="flex justify-end gap-2">
+        <p className="mb-5 text-sm leading-relaxed text-warm-200">{message}</p>
+        <div className="flex justify-end gap-3">
           <button
             onClick={onCancel}
-            className="cursor-pointer rounded-md border border-warm-700 bg-warm-800/50 px-3 py-1.5 font-serif text-xs text-warm-300 transition-colors hover:bg-warm-800"
+            className="cursor-pointer rounded-full border border-warm-700 bg-transparent px-4 py-1.5 font-serif text-xs uppercase tracking-wider text-warm-400 transition-colors duration-200 hover:border-warm-600 hover:text-warm-200"
           >
             Cancelar
           </button>
           <button
             onClick={onConfirm}
-            className="cursor-pointer rounded-md border border-red-800/40 bg-red-900/30 px-3 py-1.5 font-serif text-xs text-red-300 transition-colors hover:bg-red-900/50"
+            className="cursor-pointer rounded-full border border-red-800/40 bg-red-900/20 px-4 py-1.5 font-serif text-xs uppercase tracking-wider text-red-300 transition-colors duration-200 hover:bg-red-900/40"
           >
             Eliminar
           </button>

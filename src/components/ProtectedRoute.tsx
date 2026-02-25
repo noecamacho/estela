@@ -7,8 +7,8 @@ export function ProtectedRoute({ children }: { children: ReactNode }) {
 
   if (loading) {
     return (
-      <div className="flex min-h-screen items-center justify-center bg-surface font-serif text-warm-400">
-        <p className="text-lg opacity-70">Cargando...</p>
+      <div className="flex min-h-screen items-center justify-center bg-surface font-serif">
+        <div className="loading-spinner" />
       </div>
     );
   }

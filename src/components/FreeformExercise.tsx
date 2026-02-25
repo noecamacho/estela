@@ -85,9 +85,9 @@ export function FreeformExercise({
 
   if (loading) {
     return (
-      <p className="mt-8 text-center text-sm text-warm-500 opacity-70">
-        Cargando entradas...
-      </p>
+      <div className="mt-12 flex justify-center">
+        <div className="loading-spinner" />
+      </div>
     );
   }
 
@@ -121,17 +121,21 @@ export function FreeformExercise({
 
   return (
     <div>
-      <div className="mb-3 rounded-lg border border-warm-800 bg-warm-900/30 p-3 text-xs leading-relaxed text-warm-500">
-        <strong className="text-warm-300">Instruccion de Hamid:</strong>{' '}
-        {description}
-        <br />
-        <br />
-        <strong>Preguntas guia:</strong> {questions}
+      {/* Info box — editorial left-accent */}
+      <div className="mb-6 border-l-2 border-warm-500/30 pl-4 text-xs leading-relaxed text-warm-500">
+        <p>
+          <strong className="text-warm-300">Instruccion de Hamid:</strong>{' '}
+          {description}
+        </p>
+        <p className="mt-2">
+          <strong className="text-warm-300">Preguntas guia:</strong> {questions}
+        </p>
       </div>
 
+      {/* Add button — pill style */}
       <button
         onClick={handleAdd}
-        className="mb-3 flex w-full cursor-pointer items-center justify-center gap-1.5 rounded-lg border border-dashed border-warm-700 bg-warm-800/30 p-2.5 font-serif text-sm text-warm-400 transition-colors hover:bg-warm-800/50"
+        className="mb-6 flex w-full cursor-pointer items-center justify-center gap-2 rounded-full border border-warm-600/30 bg-transparent py-3 font-serif text-sm text-warm-400 transition-all duration-300 hover:border-warm-500/50 hover:text-warm-300"
       >
         <svg
           width="16"
@@ -148,21 +152,22 @@ export function FreeformExercise({
         {addLabel}
       </button>
 
-      {entries.map((entry) => (
+      {entries.map((entry, i) => (
         <EntryCard
           key={entry.id}
           title={entry.titulo || 'Sin titulo'}
           subtitle={formatDate(entry.fecha)}
+          index={i}
         >
-          <div className="mb-2 flex flex-wrap items-center gap-2">
-            <label className="text-[0.65rem] uppercase tracking-wider text-warm-600">
+          <div className="mb-3 flex flex-wrap items-center gap-2">
+            <label className="text-[0.6rem] uppercase tracking-wider text-warm-600">
               Fecha:
             </label>
             <input
               type="datetime-local"
               value={toLocalInput(entry.fecha)}
               onChange={(e) => handleUpdateDate(entry.id, e.target.value)}
-              className="rounded border border-warm-700 bg-black/20 px-2 py-1 font-serif text-xs text-warm-300"
+              className="rounded-lg border border-warm-700 bg-black/20 px-2 py-1 font-serif text-xs text-warm-300 transition-colors focus:border-warm-500/40 focus:outline-none"
             />
           </div>
 
@@ -172,7 +177,7 @@ export function FreeformExercise({
               handleUpdateField(entry.id, 'titulo', e.target.value)
             }
             placeholder="Titulo de esta entrada..."
-            className="mb-2 w-full rounded border border-warm-800 bg-black/15 p-2 font-serif text-sm font-semibold text-warm-200"
+            className="mb-3 w-full rounded-lg border border-warm-800 bg-black/15 p-2.5 font-serif text-sm font-semibold text-warm-200 transition-colors focus:border-warm-500/40 focus:outline-none"
           />
 
           <textarea
@@ -182,17 +187,17 @@ export function FreeformExercise({
             }
             placeholder="Escribe aqui..."
             rows={8}
-            className="w-full resize-y rounded border border-warm-800 bg-black/15 p-2.5 font-serif text-xs leading-relaxed text-warm-400"
+            className="w-full resize-y rounded-lg border border-warm-800 bg-black/15 p-3 font-serif text-xs leading-relaxed text-warm-400 transition-colors focus:border-warm-500/40 focus:outline-none"
           />
 
-          <div className="mt-2 text-right">
+          <div className="mt-3 flex justify-end border-t border-warm-800/50 pt-3">
             <button
               onClick={() => setDeleteTarget(entry.id)}
-              className="inline-flex cursor-pointer items-center gap-1 border-none bg-transparent p-1 font-serif text-[0.65rem] text-red-400/50 hover:text-red-400"
+              className="hover-line inline-flex cursor-pointer items-center gap-1.5 border-none bg-transparent p-1 font-serif text-[0.62rem] uppercase tracking-wider text-red-400/40 transition-colors hover:text-red-400"
             >
               <svg
-                width="13"
-                height="13"
+                width="12"
+                height="12"
                 viewBox="0 0 24 24"
                 fill="none"
                 stroke="currentColor"

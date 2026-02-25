@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { flushSync } from 'react-dom';
 import { DosBanderas } from './DosBanderas';
 import { FreeformExercise } from './FreeformExercise';
 
@@ -11,26 +12,41 @@ const tabs = [
 export function ExerciseTabs() {
   const [activeTab, setActiveTab] = useState(0);
 
+  function handleTabChange(index: number) {
+    if (index === activeTab) return;
+
+    if (document.startViewTransition) {
+      document.startViewTransition(() => {
+        flushSync(() => setActiveTab(index));
+      });
+    } else {
+      setActiveTab(index);
+    }
+  }
+
   return (
     <div>
-      <div className="flex border-b border-warm-800">
+      {/* Tab bar */}
+      <div className="flex border-b border-warm-800 px-2 sm:px-6">
         {tabs.map((tab, i) => (
           <button
             key={i}
-            onClick={() => setActiveTab(i)}
-            className={`flex flex-1 cursor-pointer flex-col items-center gap-0.5 border-b-2 bg-transparent px-2 py-3 font-serif text-[0.72rem] transition-all ${
+            onClick={() => handleTabChange(i)}
+            className={`relative flex flex-1 cursor-pointer flex-col items-center gap-1 bg-transparent px-2 py-3.5 font-serif text-[0.72rem] uppercase tracking-wider transition-colors duration-200 ${
               activeTab === i
-                ? 'border-warm-400 bg-warm-800/30 text-warm-200'
-                : 'border-transparent text-warm-600 hover:text-warm-400'
+                ? 'text-warm-200'
+                : 'text-warm-600 hover:text-warm-400'
             }`}
           >
-            <span className="text-lg">{tab.icon}</span>
+            <span className="text-base">{tab.icon}</span>
             <span>{tab.label}</span>
+            {activeTab === i && <span className="tab-active-line" />}
           </button>
         ))}
       </div>
 
-      <div className="p-4 pb-24">
+      {/* Tab content */}
+      <div className="tab-content px-5 pt-6 pb-24 sm:px-8">
         {activeTab === 0 && <DosBanderas />}
 
         {activeTab === 1 && (

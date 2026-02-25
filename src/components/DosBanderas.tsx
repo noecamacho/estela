@@ -78,14 +78,16 @@ function ListSection({
   const [editingIndex, setEditingIndex] = useState<number | null>(null);
 
   return (
-    <div className="mb-3">
-      <div className="mb-1.5 flex items-center justify-between">
-        <h3 className={`text-xs font-normal ${colorClass}`}>
+    <div className="mb-4">
+      <div className="mb-2 flex items-center justify-between">
+        <h3
+          className={`text-[0.7rem] uppercase tracking-wider font-normal ${colorClass}`}
+        >
           {icon} {label}
         </h3>
         <button
           onClick={onAdd}
-          className="cursor-pointer border-none bg-transparent p-1 text-warm-500 hover:text-warm-300"
+          className="cursor-pointer border-none bg-transparent p-1 text-warm-500 transition-colors hover:text-warm-300"
           aria-label={`Agregar ${label.toLowerCase()}`}
         >
           <svg
@@ -108,7 +110,7 @@ function ListSection({
       )}
 
       {items.map((item, idx) => (
-        <div key={idx} className="mb-1 flex items-start gap-1.5">
+        <div key={idx} className="mb-1.5 flex items-start gap-2">
           <span className="mt-1 shrink-0 text-[0.6rem] text-warm-600">
             {icon === '✨' ? '✦' : '◆'}
           </span>
@@ -125,23 +127,23 @@ function ListSection({
                 onKeyDown={(e) => {
                   if (e.key === 'Escape') setEditingIndex(null);
                 }}
-                className="min-h-[3rem] flex-1 resize-y rounded border border-warm-700 bg-black/30 p-1.5 font-serif text-xs leading-relaxed text-warm-200"
+                className="min-h-[3rem] flex-1 resize-y rounded-lg border border-warm-700 bg-black/30 p-2 font-serif text-xs leading-relaxed text-warm-200 transition-colors focus:border-warm-500/40 focus:outline-none"
               />
             </div>
           ) : (
             <div className="flex flex-1 items-start justify-between gap-1">
               <p
-                className="flex-1 cursor-pointer text-xs leading-relaxed text-warm-400"
+                className="flex-1 cursor-pointer text-xs leading-relaxed text-warm-400 transition-colors hover:text-warm-300"
                 onClick={() => setEditingIndex(idx)}
               >
                 {item || (
                   <em className="text-warm-600">Click para editar...</em>
                 )}
               </p>
-              <div className="flex shrink-0 gap-0.5">
+              <div className="flex shrink-0 gap-1">
                 <button
                   onClick={() => setEditingIndex(idx)}
-                  className="cursor-pointer border-none bg-transparent p-0.5 text-warm-600 hover:text-warm-400"
+                  className="cursor-pointer border-none bg-transparent p-0.5 text-warm-600 transition-colors hover:text-warm-400"
                   aria-label="Editar"
                 >
                   <svg
@@ -159,7 +161,7 @@ function ListSection({
                 </button>
                 <button
                   onClick={() => onRemove(idx)}
-                  className="cursor-pointer border-none bg-transparent p-0.5 text-red-400/50 hover:text-red-400"
+                  className="cursor-pointer border-none bg-transparent p-0.5 text-red-400/40 transition-colors hover:text-red-400"
                   aria-label="Eliminar"
                 >
                   <svg
@@ -205,9 +207,9 @@ export function DosBanderas() {
 
   if (loading) {
     return (
-      <p className="mt-8 text-center text-sm text-warm-500 opacity-70">
-        Cargando registros...
-      </p>
+      <div className="mt-12 flex justify-center">
+        <div className="loading-spinner" />
+      </div>
     );
   }
 
@@ -295,19 +297,25 @@ export function DosBanderas() {
 
   return (
     <div>
-      <div className="mb-3 rounded-lg border border-warm-800 bg-warm-900/30 p-3 text-xs leading-relaxed text-warm-500">
-        <strong className="text-warm-300">✨ Polvo de Estrellas:</strong>{' '}
-        Serenidad, flujo, ser tu mismo.
-        <br />
-        <strong className="text-warm-300">🏴 La Madeja:</strong> Revoltijo,
-        adaptacion forzada, incomodidad, atrapado.
-        <br />
-        <em>Registra momentos de ambas banderas cada dia.</em>
+      {/* Info box — editorial left-accent */}
+      <div className="mb-6 border-l-2 border-warm-500/30 pl-4 text-xs leading-relaxed text-warm-500">
+        <p>
+          <strong className="text-warm-300">✨ Polvo de Estrellas:</strong>{' '}
+          Serenidad, flujo, ser tu mismo.
+        </p>
+        <p className="mt-1">
+          <strong className="text-warm-300">🏴 La Madeja:</strong> Revoltijo,
+          adaptacion forzada, incomodidad, atrapado.
+        </p>
+        <p className="mt-2 italic">
+          Registra momentos de ambas banderas cada dia.
+        </p>
       </div>
 
+      {/* Add button — pill style */}
       <button
         onClick={handleAdd}
-        className="mb-3 flex w-full cursor-pointer items-center justify-center gap-1.5 rounded-lg border border-dashed border-warm-700 bg-warm-800/30 p-2.5 font-serif text-sm text-warm-400 transition-colors hover:bg-warm-800/50"
+        className="mb-6 flex w-full cursor-pointer items-center justify-center gap-2 rounded-full border border-warm-600/30 bg-transparent py-3 font-serif text-sm text-warm-400 transition-all duration-300 hover:border-warm-500/50 hover:text-warm-300"
       >
         <svg
           width="16"
@@ -324,26 +332,31 @@ export function DosBanderas() {
         Nuevo registro diario
       </button>
 
-      {entries.map((entry) => (
+      {entries.map((entry, i) => (
         <EntryCard
           key={entry.id}
           title={formatDate(entry.fecha)}
+          index={i}
           badge={
-            <div className="flex gap-2 text-[0.65rem] text-warm-600">
-              <span>✦ {entry.estrellas.length}</span>
-              <span>◆ {entry.madeja.length}</span>
+            <div className="flex gap-2">
+              <span className="pill text-warm-500">
+                ✦ {entry.estrellas.length}
+              </span>
+              <span className="pill text-warm-500">
+                ◆ {entry.madeja.length}
+              </span>
             </div>
           }
         >
           <div className="mb-3 flex flex-wrap items-center gap-2">
-            <label className="text-[0.65rem] uppercase tracking-wider text-warm-600">
+            <label className="text-[0.6rem] uppercase tracking-wider text-warm-600">
               Fecha/Hora:
             </label>
             <input
               type="datetime-local"
               value={toLocalInput(entry.fecha)}
               onChange={(e) => handleUpdateDate(entry.id, e.target.value)}
-              className="rounded border border-warm-700 bg-black/20 px-2 py-1 font-serif text-xs text-warm-300"
+              className="rounded-lg border border-warm-700 bg-black/20 px-2 py-1 font-serif text-xs text-warm-300 transition-colors focus:border-warm-500/40 focus:outline-none"
             />
           </div>
 
@@ -386,7 +399,7 @@ export function DosBanderas() {
           />
 
           <div className="mb-2">
-            <h3 className="mb-1 text-[0.7rem] uppercase tracking-wider text-warm-500">
+            <h3 className="mb-1.5 text-[0.65rem] uppercase tracking-wider text-warm-500">
               ¿Que aprendi hoy?
             </h3>
             <textarea
@@ -396,18 +409,18 @@ export function DosBanderas() {
               }
               placeholder="Reflexion del dia..."
               rows={2}
-              className="w-full resize-y rounded border border-warm-800 bg-black/15 p-2 font-serif text-xs leading-relaxed text-warm-400"
+              className="w-full resize-y rounded-lg border border-warm-800 bg-black/15 p-2.5 font-serif text-xs leading-relaxed text-warm-400 transition-colors focus:border-warm-500/40 focus:outline-none"
             />
           </div>
 
-          <div className="text-right">
+          <div className="mt-3 flex justify-end border-t border-warm-800/50 pt-3">
             <button
               onClick={() => setDeleteTarget({ entryId: entry.id })}
-              className="inline-flex cursor-pointer items-center gap-1 border-none bg-transparent p-1 font-serif text-[0.65rem] text-red-400/50 hover:text-red-400"
+              className="hover-line inline-flex cursor-pointer items-center gap-1.5 border-none bg-transparent p-1 font-serif text-[0.62rem] uppercase tracking-wider text-red-400/40 transition-colors hover:text-red-400"
             >
               <svg
-                width="13"
-                height="13"
+                width="12"
+                height="12"
                 viewBox="0 0 24 24"
                 fill="none"
                 stroke="currentColor"

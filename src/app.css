@@ -2,7 +2,9 @@
 
 @theme {
   --color-surface: #1a1612;
+  --color-surface-elevated: #231e18;
 
+  --color-warm-50: #f5efe6;
   --color-warm-100: #e8dcc8;
   --color-warm-200: #d4c4a8;
   --color-warm-300: #c4a882;
@@ -13,5 +15,293 @@
   --color-warm-800: rgba(196, 168, 130, 0.08);
   --color-warm-900: #231e18;
 
+  --color-accent: #c4a882;
+
   --font-serif: 'Georgia', 'Times New Roman', serif;
+}
+
+/* ─── Global ─── */
+
+:root {
+  interpolate-size: allow-keywords;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+/* Scrollbar */
+::-webkit-scrollbar {
+  width: 5px;
+}
+::-webkit-scrollbar-track {
+  background: var(--color-surface);
+}
+::-webkit-scrollbar-thumb {
+  background: rgba(196, 168, 130, 0.18);
+  border-radius: 3px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(196, 168, 130, 0.32);
+}
+
+/* ─── View Transitions ─── */
+
+::view-transition-old(tab-content) {
+  animation: vt-out 0.2s ease-in forwards;
+}
+
+::view-transition-new(tab-content) {
+  animation: vt-in 0.25s ease-out 0.08s forwards;
+  opacity: 0;
+}
+
+@keyframes vt-out {
+  from {
+    opacity: 1;
+    transform: translateY(0);
+  }
+  to {
+    opacity: 0;
+    transform: translateY(-6px);
+  }
+}
+
+@keyframes vt-in {
+  from {
+    opacity: 0;
+    transform: translateY(6px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* ─── Keyframes ─── */
+
+@keyframes fade-in {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes slide-up {
+  from {
+    opacity: 0;
+    transform: translateY(16px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes scale-in {
+  from {
+    opacity: 0;
+    transform: scale(0.96);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+@keyframes entry-expand {
+  from {
+    opacity: 0;
+    transform: translateY(-4px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes marquee {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(-50%);
+  }
+}
+
+@keyframes underline-in {
+  from {
+    transform: scaleX(0);
+  }
+  to {
+    transform: scaleX(1);
+  }
+}
+
+@keyframes pulse-glow {
+  0%,
+  100% {
+    opacity: 0.4;
+  }
+  50% {
+    opacity: 1;
+  }
+}
+
+/* ─── Animation Utilities ─── */
+
+.animate-fade-in {
+  animation: fade-in 0.5s ease-out both;
+}
+
+.animate-slide-up {
+  animation: slide-up 0.5s ease-out both;
+}
+
+.animate-stagger {
+  animation: slide-up 0.45s cubic-bezier(0.22, 1, 0.36, 1) both;
+  animation-delay: calc(var(--i, 0) * 60ms);
+}
+
+.animate-scale-in {
+  animation: scale-in 0.3s ease-out both;
+}
+
+.animate-entry-expand {
+  animation: entry-expand 0.3s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+/* ─── Scroll-Driven Entrance ─── */
+
+.scroll-reveal {
+  animation: slide-up linear both;
+  animation-timeline: view();
+  animation-range: entry 0% entry 25%;
+}
+
+/* ─── Tab Content (View Transition name) ─── */
+
+.tab-content {
+  view-transition-name: tab-content;
+}
+
+/* ─── Tab Active Indicator ─── */
+
+.tab-active-line {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 2px;
+  background: var(--color-accent);
+  animation: underline-in 0.3s ease-out both;
+}
+
+/* ─── Entry Card ─── */
+
+.entry-card {
+  transition:
+    transform 0.25s ease,
+    box-shadow 0.25s ease;
+}
+
+.entry-card:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 4px 24px rgba(0, 0, 0, 0.2);
+}
+
+/* ─── Dialog (@starting-style) ─── */
+
+.dialog-backdrop {
+  opacity: 1;
+  backdrop-filter: blur(4px);
+  transition:
+    opacity 0.2s ease-out,
+    backdrop-filter 0.2s ease-out;
+
+  @starting-style {
+    opacity: 0;
+    backdrop-filter: blur(0px);
+  }
+}
+
+.dialog-panel {
+  opacity: 1;
+  transform: scale(1) translateY(0);
+  transition:
+    opacity 0.25s cubic-bezier(0.22, 1, 0.36, 1),
+    transform 0.25s cubic-bezier(0.22, 1, 0.36, 1);
+
+  @starting-style {
+    opacity: 0;
+    transform: scale(0.95) translateY(8px);
+  }
+}
+
+/* ─── Loading Spinner ─── */
+
+.loading-spinner {
+  width: 20px;
+  height: 20px;
+  border: 2px solid rgba(196, 168, 130, 0.12);
+  border-top-color: var(--color-accent);
+  border-radius: 50%;
+  animation: spin 0.7s linear infinite;
+}
+
+/* ─── Hover Underline Effect ─── */
+
+.hover-line {
+  position: relative;
+}
+
+.hover-line::after {
+  content: '';
+  position: absolute;
+  bottom: -1px;
+  left: 0;
+  right: 0;
+  height: 1px;
+  background: currentColor;
+  transform: scaleX(0);
+  transform-origin: right;
+  transition: transform 0.3s ease;
+}
+
+.hover-line:hover::after {
+  transform: scaleX(1);
+  transform-origin: left;
+}
+
+/* ─── Marquee ─── */
+
+.marquee-track {
+  display: flex;
+  width: max-content;
+  animation: marquee 45s linear infinite;
+}
+
+.marquee-track:hover {
+  animation-play-state: paused;
+}
+
+/* ─── Pill Badge ─── */
+
+.pill {
+  display: inline-flex;
+  align-items: center;
+  border-radius: 9999px;
+  border: 1px solid rgba(196, 168, 130, 0.15);
+  padding: 0.2rem 0.6rem;
+  font-size: 0.6rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
 }
