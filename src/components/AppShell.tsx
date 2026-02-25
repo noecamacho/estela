@@ -22,9 +22,9 @@ export function AppShell() {
   }
 
   return (
-    <div className="min-h-screen bg-bg">
+    <div data-testid="app-shell" className="min-h-screen bg-bg">
       {/* Marquee ticker — full width, Fyrre-style */}
-      <div className="overflow-hidden bg-ticker-bg">
+      <div data-testid="app-marquee" className="overflow-hidden bg-ticker-bg">
         <div className="marquee-track py-1.5">
           {Array.from({ length: 4 }).map((_, i) => (
             <span
@@ -46,10 +46,16 @@ export function AppShell() {
         <header className="pt-6 pb-5">
           <div className="flex items-start justify-between">
             <div className="animate-fade-in">
-              <h1 className="text-2xl font-semibold uppercase tracking-[0.1em] text-fg sm:text-3xl">
+              <h1
+                data-testid="app-title"
+                className="text-2xl font-semibold uppercase tracking-[0.1em] text-fg sm:text-3xl"
+              >
                 {t.auth.appName}
               </h1>
-              <p className="mt-1.5 font-serif text-sm italic text-fg-muted">
+              <p
+                data-testid="app-greeting"
+                className="mt-1.5 font-serif text-sm italic text-fg-muted"
+              >
                 {getGreeting()}
                 {firstName ? `, ${firstName}` : ''}
               </p>
@@ -65,6 +71,7 @@ export function AppShell() {
                 />
               )}
               <button
+                data-testid="app-sign-out"
                 onClick={signOut}
                 className="hover-line cursor-pointer bg-transparent px-1 py-0.5 text-[0.65rem] font-medium uppercase tracking-wider text-fg-subtle transition-colors hover:text-fg"
               >

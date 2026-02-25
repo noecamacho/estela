@@ -23,6 +23,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - All exercise descriptions and guiding questions rewritten for universal audience
 - All hardcoded Spanish strings extracted to translation system
 - Updated unit tests to reflect new universal exercise names
+- Comprehensive unit test suite (129 tests) — 100% line and function coverage
+- `data-testid` attributes on all interactive UI elements for E2E reliability
+- E2E test suite (15 tests): auth flow, theme toggle, language toggle, SPA navigation
+- E2E selector registry documentation (`docs/E2E_SELECTORS.md`)
+- Unit tests for all components, contexts, utilities, and i18n modules
 
 ## [0.2.0] - 2026-02-25
 

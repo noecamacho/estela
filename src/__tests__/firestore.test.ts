@@ -94,6 +94,39 @@ describe('Firestore helpers', () => {
     expect(unsub).toBe(unsubFn);
   });
 
+  it('subscribeToDosBanderas maps snapshot docs to entries with id', () => {
+    const unsubFn = vi.fn();
+    mockOnSnapshot.mockImplementation(
+      (_q: unknown, handler: (snap: unknown) => void) => {
+        handler({
+          docs: [
+            {
+              id: 'doc-1',
+              data: () => ({
+                fecha: { seconds: 100 },
+                estrellas: ['a'],
+                madeja: ['b'],
+                aprendizaje: 'c',
+              }),
+            },
+          ],
+        });
+        return unsubFn;
+      },
+    );
+    const callback = vi.fn();
+    subscribeToDosBanderas('user-1', callback);
+    expect(callback).toHaveBeenCalledWith([
+      {
+        id: 'doc-1',
+        fecha: { seconds: 100 },
+        estrellas: ['a'],
+        madeja: ['b'],
+        aprendizaje: 'c',
+      },
+    ]);
+  });
+
   it('subscribeToFreeform calls onSnapshot and returns unsubscribe', () => {
     const unsubFn = vi.fn();
     mockOnSnapshot.mockReturnValue(unsubFn);
@@ -102,5 +135,36 @@ describe('Firestore helpers', () => {
     const unsub = subscribeToFreeform('user-1', 'ejercicio3', callback);
     expect(mockOnSnapshot).toHaveBeenCalled();
     expect(unsub).toBe(unsubFn);
+  });
+
+  it('subscribeToFreeform maps snapshot docs to entries with id', () => {
+    const unsubFn = vi.fn();
+    mockOnSnapshot.mockImplementation(
+      (_q: unknown, handler: (snap: unknown) => void) => {
+        handler({
+          docs: [
+            {
+              id: 'doc-2',
+              data: () => ({
+                fecha: { seconds: 200 },
+                titulo: 'Test',
+                contenido: 'Content',
+              }),
+            },
+          ],
+        });
+        return unsubFn;
+      },
+    );
+    const callback = vi.fn();
+    subscribeToFreeform('user-1', 'ejercicio2', callback);
+    expect(callback).toHaveBeenCalledWith([
+      {
+        id: 'doc-2',
+        fecha: { seconds: 200 },
+        titulo: 'Test',
+        contenido: 'Content',
+      },
+    ]);
   });
 });

@@ -140,4 +140,34 @@ describe('ExerciseTabs', () => {
       expect(screen.getByText('Nueva reflexion')).toBeInTheDocument();
     });
   });
+
+  it('uses startViewTransition when available', async () => {
+    const mockTransition = vi.fn((cb: () => void) => cb());
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    (document as any).startViewTransition = mockTransition;
+
+    const user = userEvent.setup();
+    render(<ExerciseTabs />);
+
+    await user.click(screen.getByText('Vinculo Significativo'));
+    expect(mockTransition).toHaveBeenCalledOnce();
+    await waitFor(() => {
+      expect(screen.getByText('Nueva entrada')).toBeInTheDocument();
+    });
+
+    // Clean up
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    delete (document as any).startViewTransition;
+  });
+
+  it('clicking the active tab does nothing', async () => {
+    const user = userEvent.setup();
+    render(<ExerciseTabs />);
+
+    // First tab is already active, clicking it should not change content
+    await user.click(screen.getByText('Dos Banderas'));
+    await waitFor(() => {
+      expect(screen.getByText('Nuevo registro diario')).toBeInTheDocument();
+    });
+  });
 });

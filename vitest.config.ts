@@ -10,7 +10,12 @@ export default defineConfig({
     coverage: {
       reporter: ['text', 'lcov'],
       include: ['src/**/*.{ts,tsx}'],
-      exclude: ['src/__tests__/**', 'src/vite-env.d.ts', 'src/main.tsx'],
+      exclude: [
+        'src/__tests__/**',
+        'src/vite-env.d.ts',
+        'src/main.tsx',
+        'src/types/**',
+      ],
     },
   },
 });

@@ -23,6 +23,7 @@ export function ThemeToggle() {
 
   return (
     <button
+      data-testid="theme-toggle"
       onClick={() => setDark((d) => !d)}
       className="cursor-pointer bg-transparent p-1.5 text-fg-subtle transition-colors hover:text-fg"
       aria-label={dark ? t.theme.light : t.theme.dark}

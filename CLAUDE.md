@@ -86,7 +86,22 @@ Estela is a personal therapy exercise journal. Users authenticate with Google an
 - **Critical:** Use `queueMicrotask` for async subscription callbacks in mocks — synchronous callbacks cause infinite re-render loops and OOM crashes
 - **Critical:** Explicit `afterEach(cleanup)` in test setup — without this, DOM elements stack across tests
 - Test setup: `src/__tests__/setup.ts` (jest-dom matchers + cleanup)
-- Coverage via `@vitest/coverage-v8`
+- Coverage via `@vitest/coverage-v8` — type-only files (`src/types/**`) excluded from coverage
+- Coverage targets: 100% lines, 100% functions, >90% statements
+
+### Unit Test Patterns
+
+- **`renderWithEntries()` helper** — for components with Firestore subscriptions, set mock implementation BEFORE render to provide data via `queueMicrotask`. Do NOT capture subscription callbacks to push data after render (causes act() flushing issues).
+- **Never nest `vi.mock()` inside a test** — hoisting causes it to override the module-level mock for ALL tests in the file
+- **`vi.spyOn(Date.prototype, 'getHours')`** — mock time-dependent logic (e.g. greetings); always `vi.restoreAllMocks()` in `afterEach`
+- **`document.startViewTransition`** — mock directly on `document` object; clean up with `delete` in test
+
+### E2E Test Conventions
+
+- **Relative paths required:** Use `page.goto('./login')` not `page.goto('/login')` — the Vite dev server base is `/estela/`, and absolute paths bypass it
+- **`data-testid` attributes** on all interactive/assertable elements — see `docs/E2E_SELECTORS.md` for the full registry
+- **JSDoc header** in each spec file listing all `data-testid` selectors used
+- **Playwright config** (`playwright.config.ts`): baseURL `http://localhost:5173/estela/`, webServer auto-starts `npm run dev`
 
 ## Git Conventions
 
@@ -126,12 +141,14 @@ Estela is a personal therapy exercise journal. Users authenticate with Google an
 
 ```
 src/
-  lib/          Firebase init (firebase.ts) + Firestore CRUD helpers (firestore.ts)
-  context/      AuthContext (Google sign-in state + useAuth hook)
+  lib/          Firebase init (firebase.ts) + Firestore CRUD helpers (firestore.ts) + date-utils.ts
+  context/      AuthContext + LanguageContext (Google sign-in + i18n)
   components/   UI components (LoginPage, AppShell, ExerciseTabs, etc.)
+  i18n/         Translations (ES/EN) — getTranslations(), translation keys
   types/        TypeScript interfaces (DosBanderasEntry, FreeformEntry, etc.)
-  __tests__/    Unit tests + setup
-e2e/            Playwright E2E tests
+  __tests__/    Unit tests + setup (129 tests, 100% line coverage)
+e2e/            Playwright E2E tests (15 tests: auth, theme, language, navigation)
+docs/           E2E selector registry (E2E_SELECTORS.md)
 .github/
   workflows/    CI (ci.yml) + Deploy (deploy.yml)
 ```

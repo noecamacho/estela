@@ -21,10 +21,12 @@ export function EntryCard({
 
   return (
     <div
+      data-testid="entry-card"
       className="entry-card animate-stagger mb-4 overflow-hidden rounded border border-border bg-bg-elevated"
       style={{ '--i': index } as React.CSSProperties}
     >
       <button
+        data-testid="entry-card-toggle"
         onClick={() => setExpanded(!expanded)}
         className="flex w-full cursor-pointer items-center justify-between bg-transparent px-4 py-3.5 text-left transition-colors duration-200 hover:bg-accent-muted"
       >
@@ -54,7 +56,10 @@ export function EntryCard({
       </button>
 
       {expanded && (
-        <div className="animate-entry-expand border-t border-border px-4 py-3">
+        <div
+          data-testid="entry-card-content"
+          className="animate-entry-expand border-t border-border px-4 py-3"
+        >
           {children}
         </div>
       )}

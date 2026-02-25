@@ -29,10 +29,14 @@ export function ExerciseTabs() {
   return (
     <div>
       {/* Tab bar */}
-      <div className="flex border-b border-border">
+      <div
+        data-testid="exercise-tab-bar"
+        className="flex border-b border-border"
+      >
         {tabs.map((tab, i) => (
           <button
             key={i}
+            data-testid={`tab-exercise${i + 1}`}
             onClick={() => handleTabChange(i)}
             className={`relative flex flex-1 cursor-pointer flex-col items-center gap-1 bg-transparent px-2 py-3.5 text-[0.72rem] font-medium uppercase tracking-wider transition-colors duration-200 ${
               activeTab === i ? 'text-fg' : 'text-fg-subtle hover:text-fg-muted'
@@ -46,7 +50,7 @@ export function ExerciseTabs() {
       </div>
 
       {/* Tab content */}
-      <div className="tab-content pt-8 pb-24">
+      <div data-testid="tab-content" className="tab-content pt-8 pb-24">
         {activeTab === 0 && <DosBanderas />}
 
         {activeTab === 1 && (

@@ -85,6 +85,7 @@ export function FreeformExercise({
     <div>
       {/* Collapsible instructions — progressive disclosure */}
       <button
+        data-testid="freeform-guide-toggle"
         onClick={() => setShowGuide(!showGuide)}
         className="mb-3 flex cursor-pointer items-center gap-1.5 bg-transparent text-[0.7rem] font-medium uppercase tracking-wider text-fg-subtle transition-colors hover:text-fg-muted"
       >
@@ -104,7 +105,10 @@ export function FreeformExercise({
       </button>
 
       {showGuide && (
-        <div className="animate-entry-expand mb-6 border-l-2 border-accent/30 pl-4 font-serif text-xs leading-relaxed text-fg-muted">
+        <div
+          data-testid="freeform-guide"
+          className="animate-entry-expand mb-6 border-l-2 border-accent/30 pl-4 font-serif text-xs leading-relaxed text-fg-muted"
+        >
           <p>
             <strong className="text-fg">{t.freeform.instructionLabel}</strong>{' '}
             {description}
@@ -118,6 +122,7 @@ export function FreeformExercise({
 
       {/* Add button — pill style */}
       <button
+        data-testid="freeform-add"
         onClick={handleAdd}
         className="mb-6 flex w-full cursor-pointer items-center justify-center gap-2 rounded-full border border-border bg-transparent py-3 text-sm font-medium text-fg-muted transition-all duration-300 hover:border-border-bold hover:text-fg"
       >

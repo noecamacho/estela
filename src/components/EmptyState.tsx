@@ -8,7 +8,10 @@ export function EmptyState({ message }: EmptyStateProps) {
   const { t } = useLanguage();
 
   return (
-    <div className="animate-fade-in mt-16 flex flex-col items-center text-center">
+    <div
+      data-testid="empty-state"
+      className="animate-fade-in mt-16 flex flex-col items-center text-center"
+    >
       {/* Decorative element */}
       <svg
         width="32"

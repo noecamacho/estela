@@ -21,7 +21,10 @@ export function LoginPage() {
   }
 
   return (
-    <div className="flex min-h-screen flex-col items-center justify-center bg-bg px-6">
+    <div
+      data-testid="login-page"
+      className="flex min-h-screen flex-col items-center justify-center bg-bg px-6"
+    >
       {/* Theme toggle + Language toggle — top right */}
       <div className="fixed top-4 right-4 flex items-center gap-1">
         <LanguageToggle />
@@ -30,6 +33,7 @@ export function LoginPage() {
 
       <div className="w-full max-w-md text-center">
         <p
+          data-testid="login-subtitle"
           className="animate-stagger text-[0.65rem] font-medium uppercase tracking-[0.3em] text-fg-subtle"
           style={{ '--i': 0 } as React.CSSProperties}
         >
@@ -37,6 +41,7 @@ export function LoginPage() {
         </p>
 
         <h1
+          data-testid="login-title"
           className="animate-stagger mt-4 text-5xl font-semibold uppercase tracking-[0.15em] text-fg sm:text-6xl"
           style={{ '--i': 1 } as React.CSSProperties}
         >
@@ -56,6 +61,7 @@ export function LoginPage() {
         </p>
 
         <button
+          data-testid="login-sign-in-button"
           onClick={signIn}
           className="animate-stagger mx-auto flex w-full max-w-xs cursor-pointer items-center justify-center gap-3 rounded-full border border-border bg-transparent px-8 py-3.5 text-sm font-medium tracking-wide text-fg transition-all duration-300 hover:border-border-bold hover:bg-accent-muted"
           style={{ '--i': 4 } as React.CSSProperties}
